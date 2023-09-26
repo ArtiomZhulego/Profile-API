@@ -37,7 +37,7 @@ namespace Profile_API.Middleware
 
                 message = exception.Message;
             }
-            else if (exception is DoctorNotFoundException || exception is PatientNotFoundException || exception is ReceptionistNotFoundException || exception is SpecializationNotFound)
+            else if (exception is DoctorNotFoundException || exception is PatientNotFoundException || exception is ReceptionistNotFoundException)
             {
                 statusCode = HttpStatusCode.NotFound;
 
