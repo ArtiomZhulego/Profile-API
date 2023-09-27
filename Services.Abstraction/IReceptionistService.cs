@@ -8,10 +8,10 @@ namespace Services.Abstraction
 
         Task<ReceptionistDTO> GetByIdAsync(Guid receptionistId, CancellationToken cancellationToken = default);
 
-        Task<ReceptionistDTO> Update(Guid receptionistId, ReceptionistDTO receptionist, CancellationToken token);
+        Task<ReceptionistDTO> UpdateAsync(Guid receptionistId, ReceptionistDTO receptionist, CancellationToken token);
 
-        Task Delete(Guid receptionistId, CancellationToken token);
+        Task DeleteAsync(Guid receptionistId, CancellationToken token);
 
-        Task<ReceptionistDTO> Create(CancellationToken token);
+        Task<ReceptionistDTO> CreateAsync(CancellationToken token);
     }
 }

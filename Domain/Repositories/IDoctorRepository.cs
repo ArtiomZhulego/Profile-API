@@ -6,16 +6,16 @@
 
         Task<Doctor> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default);
 
-        Task<Doctor> Update(Guid doctorId, Doctor doctor, CancellationToken token);
+        Task<Doctor> UpdateAsync(Guid doctorId, Doctor doctor, CancellationToken token);
 
-        Task<Doctor> PatchStatus(Guid doctorId, int statuseId, CancellationToken token);
+        Task<Doctor> UpdateStatusAsync(Guid doctorId, Guid statuseId, CancellationToken token);
 
-        Task Delete(Guid doctorId, CancellationToken token);
+        Task DeleteAsync(Guid doctorId, CancellationToken token);
 
-        Task<Doctor> Create(CancellationToken token);
+        Task<Doctor> CreateAsync(CancellationToken token);
 
-        Task<List<Doctor>> FilterDoctor(Guid officeId, Guid specialityId, CancellationToken token);
+        Task<List<Doctor>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token);
 
-        Task<List<Doctor>> SearchByName(string fullName, CancellationToken token);
+        Task<List<Doctor>> SearchByNameAsync(string fullName, CancellationToken token);
     }
 }

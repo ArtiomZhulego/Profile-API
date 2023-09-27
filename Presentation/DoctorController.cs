@@ -18,11 +18,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>All Doctors</returns>
         [HttpGet]
-        public async Task<IActionResult> GetDoctors(CancellationToken token)
+        public async Task<IActionResult> GetDoctorsAsync(CancellationToken token)
         {
             var doctorsDTO = await doctorService.GetAllAsync(token);
 
-            return StatusCode(200, doctorsDTO);
+            return Ok(doctorsDTO);
         }
 
         /// <summary>
@@ -32,11 +32,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor with identification</returns>
         [HttpGet("{doctorId:guid}")]
-        public async Task<IActionResult> GetDoctor(Guid doctorId, CancellationToken token)
+        public async Task<IActionResult> GetDoctorAsync(Guid doctorId, CancellationToken token)
         {
             var doctorDTO = await doctorService.GetByIdAsync(doctorId, token);
 
-            return StatusCode(200, doctorDTO);
+            return Ok(doctorDTO);
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor's dto</returns>
         [HttpPatch("{doctorId:guid}")]
-        public async Task<IActionResult> PatchStatus(Guid doctorId, int statusId, CancellationToken token)
+        public async Task<IActionResult> UpdateStatusAsync(Guid doctorId, Guid statusId, CancellationToken token)
         {
-            var doctorDTO = await doctorService.PatchStatus(doctorId, statusId, token);
+            var doctorDTO = await doctorService.UpdateStatusAsync(doctorId, statusId, token);
 
-            return StatusCode(200, doctorDTO);
+            return Ok(doctorDTO);
         }
 
         /// <summary>
@@ -62,11 +62,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor's dto</returns>
         [HttpPut("{doctorId:guid}")]
-        public async Task<IActionResult> PutDoctor(Guid doctorId, DoctorDTO doctorDTO, CancellationToken token)
+        public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, DoctorDTO doctorDTO, CancellationToken token)
         {
-            var _doctorDTO = await doctorService.Update(doctorId, doctorDTO, token);
+            var _doctorDTO = await doctorService.UpdateAsync(doctorId, doctorDTO, token);
 
-            return StatusCode(200, _doctorDTO);
+            return Ok(_doctorDTO);
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Created and info</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateDoctor(CancellationToken token)
+        public async Task<IActionResult> CreateDoctorAsync(CancellationToken token)
         {
-            var doctor = await doctorService.Create(token);
+            var doctor = await doctorService.CreateAsync(token);
 
             return Created($"{doctor.Id}", doctor);
         }
@@ -89,9 +89,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{doctorId:guid}")]
-        public async Task<IActionResult> DeleteDoctor(Guid doctorId, CancellationToken token)
+        public async Task<IActionResult> DeleteDoctorAsync(Guid doctorId, CancellationToken token)
         {
-            await doctorService.Delete(doctorId, token);
+            await doctorService.DeleteAsync(doctorId, token);
 
             return NoContent();
         }
@@ -104,9 +104,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>No Content</returns>
         [HttpGet("specialty={specialty}&office={office}")]
-        public async Task<IActionResult> FilterDoctor(Guid officeId, Guid specialityId, CancellationToken token)
+        public async Task<IActionResult> FilterDoctorAsyc(Guid officeId, Guid specialityId, CancellationToken token)
         {
-            var doctorsDTO = await doctorService.FilterDoctor(officeId, specialityId, token);
+            var doctorsDTO = await doctorService.FilterDoctorAsync(officeId, specialityId, token);
 
             return Ok(doctorsDTO);
         }
@@ -118,11 +118,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor with identification</returns>
         [HttpGet("fullName={fullName}")]
-        public async Task<IActionResult> SearchByName(string fullName, CancellationToken token)
+        public async Task<IActionResult> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            var doctorDTO = await doctorService.SearchByName(fullName, token);
+            var doctorDTO = await doctorService.SearchByNameAsync(fullName, token);
 
-            return StatusCode(200, doctorDTO);
+            return Ok(doctorDTO);
         }
     }
 }

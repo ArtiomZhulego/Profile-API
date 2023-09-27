@@ -19,7 +19,7 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>All Receptionists</returns>
         [HttpGet]
-        public async Task<IActionResult> GetReceptionists(CancellationToken token)
+        public async Task<IActionResult> GetReceptionistsAsync(CancellationToken token)
         {
             var receptionistDTO = await receptionistService.GetAllAsync(token);
 
@@ -33,7 +33,7 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Receptionist with identification</returns>
         [HttpGet("{receptionistId:guid}")]
-        public async Task<IActionResult> GetReceptionist(Guid receptionistId, CancellationToken token)
+        public async Task<IActionResult> GetReceptionistAsync(Guid receptionistId, CancellationToken token)
         {
             var receptionistDTO = await receptionistService.GetByIdAsync(receptionistId, token);
 
@@ -48,9 +48,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Receptionist DTO</returns>
         [HttpPut("{receptionistId:guid}")]
-        public async Task<IActionResult> PutDoctor(Guid receptionistId, ReceptionistDTO receptionistDTO, CancellationToken token)
+        public async Task<IActionResult> PutDoctorAsync(Guid receptionistId, ReceptionistDTO receptionistDTO, CancellationToken token)
         {
-            var _receptionistDTO = await receptionistService.Update(receptionistId, receptionistDTO, token);
+            var _receptionistDTO = await receptionistService.UpdateAsync(receptionistId, receptionistDTO, token);
 
             return StatusCode(200, _receptionistDTO);
         }
@@ -61,9 +61,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Created and info</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateReceptionist(CancellationToken token)
+        public async Task<IActionResult> CreateReceptionistAsync(CancellationToken token)
         {
-            var receptionistDTO = await receptionistService.Create(token);
+            var receptionistDTO = await receptionistService.CreateAsync(token);
 
             return Created($"{receptionistDTO.Id}", receptionistDTO);
         }
@@ -75,9 +75,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{receptionistId:guid}")]
-        public async Task<IActionResult> DeleteReceptionist(Guid receptionistId, CancellationToken token)
+        public async Task<IActionResult> DeleteReceptionistAsync(Guid receptionistId, CancellationToken token)
         {
-            await receptionistService.Delete(receptionistId, token);
+            await receptionistService.DeleteAsync(receptionistId, token);
 
             return NoContent();
         }

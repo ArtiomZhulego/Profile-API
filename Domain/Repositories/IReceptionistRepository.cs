@@ -6,10 +6,10 @@
 
         Task<Receptionist> GetByIdAsync(Guid receptionistId, CancellationToken cancellationToken = default);
 
-        Task<Receptionist> Update(Guid receptionistId, Receptionist receptionist, CancellationToken token);
+        Task<Receptionist> UpdateAsync(Guid receptionistId, Receptionist receptionist, CancellationToken token);
 
-        Task Delete(Guid receptionistId, CancellationToken token);
+        Task DeleteAsync(Guid receptionistId, CancellationToken token);
 
-        Task<Receptionist> Create(CancellationToken token);
+        Task<Receptionist> CreateAsync(CancellationToken token);
     }
 }

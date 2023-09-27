@@ -2,9 +2,9 @@
 
 namespace Contracts.CreatingDto
 {
-    public class CreatingDoctorDto
+    public class DoctorMapper
     {
-        public static DoctorDTO Adapt(Doctor _doctor)
+        public static DoctorDTO MapToDoctorDto(Doctor _doctor)
         {
             var doctor = new DoctorDTO()
             {
@@ -24,9 +24,9 @@ namespace Contracts.CreatingDto
             return doctor;
         }
 
-        public static List<DoctorDTO> Adapt(List<Doctor> _doctor)
+        public static List<DoctorDTO> MapToDoctorDto(List<Doctor> _doctor)
         {
-            var allDoctors = _doctor.ConvertAll(doctor => new DoctorDTO()
+            var doctors = _doctor.ConvertAll(doctor => new DoctorDTO()
             {
                 DateOfBirth = doctor.DateOfBirth,
                 SpecializationId = doctor.SpecializationId,
@@ -41,7 +41,27 @@ namespace Contracts.CreatingDto
                 Photo = doctor.Photo
             });
 
-            return allDoctors;
+            return doctors;
+        }
+
+        public static Doctor MapToDoctor(DoctorDTO doctorDTO)
+        {
+            var doctor = new Doctor()
+            {
+                DateOfBirth = doctorDTO.DateOfBirth,
+                SpecializationId = doctorDTO.SpecializationId,
+                DoctorStatuses = doctorDTO.DoctorStatuses,
+                CareerStartYear = doctorDTO.CareerStartYear,
+                Email = doctorDTO.Email,
+                FirstName = doctorDTO.FirstName,
+                Id = doctorDTO.Id,
+                LastName = doctorDTO.LastName,
+                MiddleName = doctorDTO.MiddleName,
+                OfficeId = doctorDTO.OfficeId,
+                Photo = doctorDTO.Photo
+            };
+
+            return doctor;
         }
     }
 }

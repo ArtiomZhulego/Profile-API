@@ -1,7 +1,6 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using Services.Abstraction;
 
 namespace Presentation
 {
@@ -19,7 +18,7 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>All Patients</returns>
         [HttpGet]
-        public async Task<IActionResult> GetPatients(CancellationToken token)
+        public async Task<IActionResult> GetPatientsAsync(CancellationToken token)
         {
             var patientDTO = await patientService.GetAllAsync(token);
 
@@ -32,7 +31,7 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Patient with identification</returns>
         [HttpGet("{patientId:guid}")]
-        public async Task<IActionResult> GetPatient(Guid patientId, CancellationToken token)
+        public async Task<IActionResult> GetPatientAsync(Guid patientId, CancellationToken token)
         {
             var patientDTO = await patientService.GetByIdAsync(patientId, token);
 
@@ -46,9 +45,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Patients dto</returns>
         [HttpPut("{patientId:guid}")]
-        public async Task<IActionResult> PutPatient(Guid patientId, PatientDTO patientDTO, CancellationToken token)
+        public async Task<IActionResult> PutPatientAsync(Guid patientId, PatientDTO patientDTO, CancellationToken token)
         {
-            var _patientDTO = await patientService.Update(patientId, patientDTO, token);
+            var _patientDTO = await patientService.UpdateAsync(patientId, patientDTO, token);
 
             return StatusCode(200, _patientDTO);
         }
@@ -59,9 +58,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Created and info</returns>
         [HttpPost]
-        public async Task<IActionResult> CreatePatient(CancellationToken token)
+        public async Task<IActionResult> CreatePatientAsync(CancellationToken token)
         {
-            var patient = await patientService.Create(token);
+            var patient = await patientService.CreateAsync(token);
 
             return Created($"{patient.Id}", patient);
         }
@@ -73,25 +72,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{patientId:guid}")]
-        public async Task<IActionResult> DeletePatient(Guid patientId, CancellationToken token)
+        public async Task<IActionResult> DeletePatientAsync(Guid patientId, CancellationToken token)
         {
-            await patientService.Delete(patientId, token);
+            await patientService.DeleteAsync(patientId, token);
 
             return NoContent();
         }
-
-        /// <summary>
-        /// Search patient by name
-        /// </summary>
-        /// <param name="fullName"></param>
-        /// <param name="token"></param>
-        /// <returns>Doctor with identification</returns>
-        /*[HttpGet("{fullName:string}")]
-        public async Task<IActionResult> SearchByName(string fullName, CancellationToken token)
-        {
-            var doctorDTO = await patientService.SearchByName(fullName, token);
-
-            return StatusCode(200, doctorDTO);
-        }*/
     }
 }

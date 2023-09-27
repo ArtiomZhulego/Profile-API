@@ -13,34 +13,34 @@ namespace Services
 
         public ReceptionistService(IReceptionistRepository repository) => _repository = repository;
 
-        public async Task<ReceptionistDTO> Create(CancellationToken token)
+        public async Task<ReceptionistDTO> CreateAsync(CancellationToken token)
         {
-            var reseptionist = await _repository.Create(token);
+            var reseptionist = await _repository.CreateAsync(token);
 
             if (reseptionist is null)
             {
                 throw new BadRequestException($"The receptionist could not be created");
             }
 
-            return CreatingReceptionistDto.Adapt(reseptionist);
+            return ReceptionistMapper.MapToReceptionistDto(reseptionist);
         }
 
-        public async Task Delete(Guid receptionistId, CancellationToken token)
+        public async Task DeleteAsync(Guid receptionistId, CancellationToken token)
         {
-            await _repository.Delete(receptionistId, token);
+            await _repository.DeleteAsync(receptionistId, token);
         }
 
         public async Task<List<ReceptionistDTO>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return CreatingReceptionistDto.Adapt(await _repository.GetAllAsync(cancellationToken));
+            return ReceptionistMapper.MapToReceptionistDto(await _repository.GetAllAsync(cancellationToken));
         }
 
         public async Task<ReceptionistDTO> GetByIdAsync(Guid receptionistId, CancellationToken cancellationToken = default)
         {
-            return CreatingReceptionistDto.Adapt(await _repository.GetByIdAsync(receptionistId, cancellationToken));
+            return ReceptionistMapper.MapToReceptionistDto(await _repository.GetByIdAsync(receptionistId, cancellationToken));
         }
 
-        public async Task<ReceptionistDTO> Update(Guid receptionistId, ReceptionistDTO receptionist, CancellationToken token)
+        public async Task<ReceptionistDTO> UpdateAsync(Guid receptionistId, ReceptionistDTO receptionist, CancellationToken token)
         {
             var _receptionist = await _repository.GetByIdAsync(receptionistId, token);
 
@@ -49,9 +49,9 @@ namespace Services
                 throw new DoctorNotFoundException(receptionistId);
             }
 
-            await _repository.Update(receptionistId, UpdatingReceptionistDto.Adapt(receptionist), token);
+            await _repository.UpdateAsync(receptionistId, ReceptionistMapper.MapToReceptionist(receptionist), token);
 
-            return CreatingReceptionistDto.Adapt(_receptionist);
+            return ReceptionistMapper.MapToReceptionistDto(_receptionist);
         }
     }
 }

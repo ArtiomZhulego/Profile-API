@@ -1,11 +1,8 @@
 ﻿using Contracts;
 using Contracts.CreatingDto;
-using Contracts.UpdatingDto;
-using Domain;
 using Domain.Exceptions;
 using Domain.Repositories;
 using Services.Abstraction;
-using System.Threading;
 
 namespace Services
 {
@@ -15,39 +12,39 @@ namespace Services
 
         public DoctorService(IDoctorRepository repository) => _repository = repository;
         
-        public async Task<DoctorDTO> Create(CancellationToken token)
+        public async Task<DoctorDTO> CreateAsync(CancellationToken token)
         {
-            var doctor = await _repository.Create(token);
+            var doctor = await _repository.CreateAsync(token);
 
             if (doctor is null)
             {
                 throw new BadRequestException($"The doctor could not be created");
             }
 
-            return CreatingDoctorDto.Adapt(doctor);
+            return DoctorMapper.MapToDoctorDto(doctor);
         }
 
-        public async Task Delete(Guid doctorId, CancellationToken token)
+        public async Task DeleteAsync(Guid doctorId, CancellationToken token)
         {
-            await _repository.Delete(doctorId, token);
+            await _repository.DeleteAsync(doctorId, token);
         }
 
-        public async Task<List<DoctorDTO>> FilterDoctor(Guid officeId, Guid specialityId, CancellationToken token)
+        public async Task<List<DoctorDTO>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token)
         {
-            return CreatingDoctorDto.Adapt(await _repository.FilterDoctor(officeId, specialityId, token));
+            return DoctorMapper.MapToDoctorDto(await _repository.FilterDoctorAsync(officeId, specialityId, token));
         }
 
         public async Task<List<DoctorDTO>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return CreatingDoctorDto.Adapt(await _repository.GetAllAsync(cancellationToken));
+            return DoctorMapper.MapToDoctorDto(await _repository.GetAllAsync(cancellationToken));
         }
 
         public async Task<DoctorDTO> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default)
         {
-            return CreatingDoctorDto.Adapt(await _repository.GetByIdAsync(doctorId,cancellationToken));
+            return DoctorMapper.MapToDoctorDto(await _repository.GetByIdAsync(doctorId,cancellationToken));
         }
 
-        public async Task<DoctorDTO> PatchStatus(Guid doctorId, int statuseId, CancellationToken token)
+        public async Task<DoctorDTO> UpdateStatusAsync(Guid doctorId, Guid statuseId, CancellationToken token)
         {
             var doctor = await _repository.GetByIdAsync(doctorId, token);
 
@@ -56,17 +53,17 @@ namespace Services
                 throw new DoctorNotFoundException(doctorId);
             }
 
-            await _repository.PatchStatus(doctorId, statuseId, token);
+            await _repository.UpdateStatusAsync(doctorId, statuseId, token);
 
-            return CreatingDoctorDto.Adapt(doctor);
+            return DoctorMapper.MapToDoctorDto(doctor);
         }
 
-        public async Task<List<DoctorDTO>> SearchByName(string fullName, CancellationToken token)
+        public async Task<List<DoctorDTO>> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            return CreatingDoctorDto.Adapt(await _repository.SearchByName(fullName, token));
+            return DoctorMapper.MapToDoctorDto(await _repository.SearchByNameAsync(fullName, token));
         }
 
-        public async Task<DoctorDTO> Update(Guid doctorId, DoctorDTO doctor, CancellationToken token)
+        public async Task<DoctorDTO> UpdateAsync(Guid doctorId, DoctorDTO doctor, CancellationToken token)
         {
             var _doctor = await _repository.GetByIdAsync(doctorId, token);
 
@@ -75,9 +72,9 @@ namespace Services
                 throw new DoctorNotFoundException(doctorId);
             }
 
-            await _repository.Update(doctorId, UpdatingDoctorDto.Adapt(doctor), token);
+            await _repository.UpdateAsync(doctorId, DoctorMapper.MapToDoctor(doctor), token);
 
-            return CreatingDoctorDto.Adapt(_doctor);
+            return DoctorMapper.MapToDoctorDto(_doctor);
         }
     }
 }

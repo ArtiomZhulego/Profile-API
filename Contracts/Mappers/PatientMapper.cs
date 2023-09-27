@@ -2,9 +2,9 @@
 
 namespace Contracts.CreatingDto
 {
-    public class CreatingPatientDto
+    public class PatientMapper
     {
-        public static PatientDTO Adapt(Patient _patient)
+        public static PatientDTO MapToPatientDto(Patient _patient)
         {
             var patient = new PatientDTO()
             {
@@ -20,9 +20,9 @@ namespace Contracts.CreatingDto
             return patient;
         }
 
-        public static List<PatientDTO> Adapt(List<Patient> patient)
+        public static List<PatientDTO> MapToPatientDto(List<Patient> patient)
         {
-            var allPatient = patient.ConvertAll(_patient => new PatientDTO()
+            var patients = patient.ConvertAll(_patient => new PatientDTO()
             {
                 Id = _patient.Id,
                 FirstName = _patient.FirstName,
@@ -33,7 +33,23 @@ namespace Contracts.CreatingDto
                 Photo = _patient.Photo,
             });
 
-            return allPatient;
+            return patients;
+        }
+
+        public static Patient MapToPatient(PatientDTO patientDTO)
+        {
+            var patient = new Patient()
+            {
+                Id = patientDTO.Id,
+                FirstName = patientDTO.FirstName,
+                LastName = patientDTO.LastName,
+                DateOfBirth = patientDTO.DateOfBirth,
+                MiddleName = patientDTO.MiddleName,
+                PhoneNumber = patientDTO.PhoneNumber,
+                Photo = patientDTO.Photo,
+            };
+
+            return patient;
         }
     }
 }

@@ -9,12 +9,12 @@ namespace Services.Abstraction
 
         Task<PatientDTO> GetByIdAsync(Guid patientId, CancellationToken cancellationToken = default);
 
-        Task<PatientDTO> Update(Guid patientId, PatientDTO newPatient, CancellationToken token);
+        Task<PatientDTO> UpdateAsync(Guid patientId, PatientDTO newPatient, CancellationToken token);
 
-        Task Delete(Guid patientId, CancellationToken token);
+        Task DeleteAsync(Guid patientId, CancellationToken token);
 
-        Task<PatientDTO> Create(CancellationToken token);
+        Task<PatientDTO> CreateAsync(CancellationToken token);
 
-        Task<List<PatientDTO>> SearchByName(string fullName, CancellationToken token);
+        Task<List<PatientDTO>> SearchByNameAsync(string fullName, CancellationToken token);
     }
 }

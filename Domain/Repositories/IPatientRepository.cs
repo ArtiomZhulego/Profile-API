@@ -6,12 +6,12 @@
 
         Task<Patient> GetByIdAsync(Guid patientId, CancellationToken cancellationToken = default);
 
-        Task<Patient> Update(Guid patientId, Patient newPatient, CancellationToken token);
+        Task<Patient> UpdateAsync(Guid patientId, Patient newPatient, CancellationToken token);
 
-        Task Delete(Guid patientId, CancellationToken token);
+        Task DeleteAsync(Guid patientId, CancellationToken token);
 
-        Task<Patient> Create(CancellationToken token);
+        Task<Patient> CreateAsync(CancellationToken token);
 
-        Task<List<Patient>> SearchByName(string fullName, CancellationToken token);
+        Task<List<Patient>> SearchByNameAsync(string fullName, CancellationToken token);
     }
 }
