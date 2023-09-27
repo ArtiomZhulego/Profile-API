@@ -23,7 +23,7 @@ namespace Presentation
         {
             var receptionistDTO = await receptionistService.GetAllAsync(token);
 
-            return StatusCode(200, receptionistDTO);
+            return Ok(receptionistDTO);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Presentation
         {
             var receptionistDTO = await receptionistService.GetByIdAsync(receptionistId, token);
 
-            return StatusCode(200, receptionistDTO);
+            return Ok(receptionistDTO);
         }
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Receptionist DTO</returns>
         [HttpPut("{receptionistId:guid}")]
-        public async Task<IActionResult> PutDoctorAsync(Guid receptionistId, ReceptionistDTO receptionistDTO, CancellationToken token)
+        public async Task<IActionResult> UpdateDoctorAsync(Guid receptionistId, ReceptionistDTO receptionistDTO, CancellationToken token)
         {
             var _receptionistDTO = await receptionistService.UpdateAsync(receptionistId, receptionistDTO, token);
 
-            return StatusCode(200, _receptionistDTO);
+            return Ok(_receptionistDTO);
         }
 
         /// <summary>

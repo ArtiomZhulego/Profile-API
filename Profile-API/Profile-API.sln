@@ -3,25 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profile-API", "Profile-API.csproj", "{D7626F34-3B93-44F1-A7DF-38EBD85A4755}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Profile-API", "Profile-API.csproj", "{D7626F34-3B93-44F1-A7DF-38EBD85A4755}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0E2C1886-6A96-43B5-8FBA-F201AB7D5892}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{AE8FCB41-B9A0-4CA3-AD4E-8BFC3C969B82}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1DFA74B-F800-41BD-A950-C03E39FDE73B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "..\Contracts\Contracts.csproj", "{217231FF-117D-4233-A113-9B36F69F04BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "..\Contracts\Contracts.csproj", "{217231FF-117D-4233-A113-9B36F69F04BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain.csproj", "{6164B8CF-980A-4D04-A996-DB12B58FE882}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "..\Domain\Domain.csproj", "{6164B8CF-980A-4D04-A996-DB12B58FE882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "..\Services\Services.csproj", "{D3636C91-53EA-46CF-8966-8562C4A5858C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "..\Services\Services.csproj", "{D3636C91-53EA-46CF-8966-8562C4A5858C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Abstraction", "..\Services.Abstraction\Services.Abstraction.csproj", "{41984F24-EF98-427E-9347-3409F1F9A20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Abstraction", "..\Services.Abstraction\Services.Abstraction.csproj", "{41984F24-EF98-427E-9347-3409F1F9A20E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistance", "..\Persistance\Persistance.csproj", "{BE62CFA7-EAC5-4F5B-B976-2E3E05AA3E41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistance", "..\Persistance\Persistance.csproj", "{BE62CFA7-EAC5-4F5B-B976-2E3E05AA3E41}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "..\Presentation\Presentation.csproj", "{40E0111E-57B3-4A5E-BE51-21A4EA325F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "..\Presentation\Presentation.csproj", "{40E0111E-57B3-4A5E-BE51-21A4EA325F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

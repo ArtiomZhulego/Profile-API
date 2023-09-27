@@ -22,7 +22,7 @@ namespace Presentation
         {
             var patientDTO = await patientService.GetAllAsync(token);
 
-            return StatusCode(200, patientDTO);
+            return Ok(patientDTO);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Presentation
         {
             var patientDTO = await patientService.GetByIdAsync(patientId, token);
 
-            return StatusCode(200, patientDTO);
+            return Ok(patientDTO);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Presentation
         {
             var _patientDTO = await patientService.UpdateAsync(patientId, patientDTO, token);
 
-            return StatusCode(200, _patientDTO);
+            return Ok(_patientDTO);
         }
 
         /// <summary>
