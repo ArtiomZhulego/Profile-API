@@ -1,6 +1,5 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Services;
 using Services.Abstraction;
 
 namespace Presentation
@@ -9,9 +8,9 @@ namespace Presentation
     [Route("receptionist")]
     public class ReceptionistController : ControllerBase
     {
-        private readonly ReceptionistService receptionistService;
+        private readonly IReceptionistService receptionistService;
 
-        public ReceptionistController(ReceptionistService receptionistService) => this.receptionistService = receptionistService;
+        public ReceptionistController(IReceptionistService receptionistService) => this.receptionistService = receptionistService;
 
         /// <summary>
         /// View receptionist
@@ -61,9 +60,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Created and info</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateReceptionistAsync(CancellationToken token)
+        public async Task<IActionResult> CreateReceptionistAsync(ReceptionistDTO _receptionistDTO, CancellationToken token)
         {
-            var receptionistDTO = await receptionistService.CreateAsync(token);
+            var receptionistDTO = await receptionistService.CreateAsync(_receptionistDTO,token);
 
             return Created($"{receptionistDTO.Id}", receptionistDTO);
         }

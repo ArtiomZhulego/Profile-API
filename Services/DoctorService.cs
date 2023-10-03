@@ -12,9 +12,9 @@ namespace Services
 
         public DoctorService(IDoctorRepository repository) => _repository = repository;
         
-        public async Task<DoctorDTO> CreateAsync(CancellationToken token)
+        public async Task<DoctorDTO> CreateAsync(DoctorDTO doctorDTO,CancellationToken token)
         {
-            var doctor = await _repository.CreateAsync(token);
+            var doctor = await _repository.CreateAsync(DoctorMapper.MapToDoctor(doctorDTO), token);
 
             if (doctor is null)
             {
@@ -44,7 +44,7 @@ namespace Services
             return DoctorMapper.MapToDoctorDto(await _repository.GetByIdAsync(doctorId,cancellationToken));
         }
 
-        public async Task<DoctorDTO> UpdateStatusAsync(Guid doctorId, Guid statuseId, CancellationToken token)
+        public async Task<DoctorDTO> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token)
         {
             var doctor = await _repository.GetByIdAsync(doctorId, token);
 

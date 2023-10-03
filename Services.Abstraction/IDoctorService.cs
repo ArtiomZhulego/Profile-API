@@ -10,11 +10,11 @@ namespace Services.Abstraction
 
         Task<DoctorDTO> UpdateAsync(Guid doctorId, DoctorDTO doctor, CancellationToken token);
 
-        Task<DoctorDTO> UpdateStatusAsync(Guid doctorId, Guid statuseId, CancellationToken token);
+        Task<DoctorDTO> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token);
 
         Task DeleteAsync(Guid doctorId, CancellationToken token);
 
-        Task<DoctorDTO> CreateAsync(CancellationToken token);
+        Task<DoctorDTO> CreateAsync(DoctorDTO doctorDTO, CancellationToken token);
 
         Task<List<DoctorDTO>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token);
 

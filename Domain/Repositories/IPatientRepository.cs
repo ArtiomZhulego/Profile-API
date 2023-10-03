@@ -10,7 +10,7 @@
 
         Task DeleteAsync(Guid patientId, CancellationToken token);
 
-        Task<Patient> CreateAsync(CancellationToken token);
+        Task<Patient> CreateAsync(Patient patient, CancellationToken token);
 
         Task<List<Patient>> SearchByNameAsync(string fullName, CancellationToken token);
     }

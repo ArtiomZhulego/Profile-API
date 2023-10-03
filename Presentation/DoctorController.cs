@@ -1,6 +1,6 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.Abstraction;
 
 namespace Presentation
 {
@@ -8,9 +8,9 @@ namespace Presentation
     [Route("doctors")]
     public class DoctorController : ControllerBase
     {
-        private readonly DoctorService doctorService;
+        private readonly IDoctorService doctorService;
 
-        public DoctorController(DoctorService doctorService) => this.doctorService = doctorService;
+        public DoctorController(IDoctorService doctorService) => this.doctorService = doctorService;
 
         /// <summary>
         /// View doctors
@@ -47,7 +47,7 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor's dto</returns>
         [HttpPatch("{doctorId:guid}")]
-        public async Task<IActionResult> UpdateStatusAsync(Guid doctorId, Guid statusId, CancellationToken token)
+        public async Task<IActionResult> UpdateStatusAsync(Guid doctorId, int statusId, CancellationToken token)
         {
             var doctorDTO = await doctorService.UpdateStatusAsync(doctorId, statusId, token);
 
@@ -75,9 +75,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Created and info</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateDoctorAsync(CancellationToken token)
+        public async Task<IActionResult> CreateDoctorAsync(DoctorDTO doctorDTO, CancellationToken token)
         {
-            var doctor = await doctorService.CreateAsync(token);
+            var doctor = await doctorService.CreateAsync(doctorDTO,token);
 
             return Created($"{doctor.Id}", doctor);
         }

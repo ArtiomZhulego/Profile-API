@@ -10,6 +10,6 @@
 
         Task DeleteAsync(Guid receptionistId, CancellationToken token);
 
-        Task<Receptionist> CreateAsync(CancellationToken token);
+        Task<Receptionist> CreateAsync(Receptionist receptionist, CancellationToken token);
     }
 }

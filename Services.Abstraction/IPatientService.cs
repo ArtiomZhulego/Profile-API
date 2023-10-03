@@ -1,5 +1,4 @@
 ﻿using Contracts;
-using Domain;
 
 namespace Services.Abstraction
 {
@@ -13,7 +12,7 @@ namespace Services.Abstraction
 
         Task DeleteAsync(Guid patientId, CancellationToken token);
 
-        Task<PatientDTO> CreateAsync(CancellationToken token);
+        Task<PatientDTO> CreateAsync(PatientDTO patientDTO, CancellationToken token);
 
         Task<List<PatientDTO>> SearchByNameAsync(string fullName, CancellationToken token);
     }

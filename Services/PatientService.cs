@@ -12,9 +12,9 @@ namespace Services
 
         public PatientService(IPatientRepository repository) => _repository = repository;
 
-        public async Task<PatientDTO> CreateAsync(CancellationToken token)
+        public async Task<PatientDTO> CreateAsync(PatientDTO patientDTO,CancellationToken token)
         {
-            var patient = await _repository.CreateAsync(token);
+            var patient = await _repository.CreateAsync(PatientMapper.MapToPatient(patientDTO), token);
 
             if (patient is null)
             {

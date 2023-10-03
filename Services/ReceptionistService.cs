@@ -12,9 +12,9 @@ namespace Services
 
         public ReceptionistService(IReceptionistRepository repository) => _repository = repository;
 
-        public async Task<ReceptionistDTO> CreateAsync(CancellationToken token)
+        public async Task<ReceptionistDTO> CreateAsync(ReceptionistDTO receptionistDTO, CancellationToken token)
         {
-            var reseptionist = await _repository.CreateAsync(token);
+            var reseptionist = await _repository.CreateAsync(ReceptionistMapper.MapToReceptionist(receptionistDTO),token);
 
             if (reseptionist is null)
             {

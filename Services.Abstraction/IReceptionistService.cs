@@ -12,6 +12,6 @@ namespace Services.Abstraction
 
         Task DeleteAsync(Guid receptionistId, CancellationToken token);
 
-        Task<ReceptionistDTO> CreateAsync(CancellationToken token);
+        Task<ReceptionistDTO> CreateAsync(ReceptionistDTO receptionistDTO, CancellationToken token);
     }
 }

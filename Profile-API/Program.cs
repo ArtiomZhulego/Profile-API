@@ -1,11 +1,21 @@
+using Domain.Repositories;
 using Microsoft.OpenApi.Models;
-using MongoDB.Driver;
-using Presentation;
+using Persistance;
 using Profile_API.Middleware;
+using Services;
+using Services.Abstraction;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<IDoctorRepository, DoctorContext>();
+builder.Services.AddSingleton<IPatientRepository, PatientContext>();
+builder.Services.AddSingleton<IReceptionistRepository, ReceptionistContext>();
+
+builder.Services.AddSingleton<IDoctorService, DoctorService>();
+builder.Services.AddSingleton<IPatientService, PatientService>();
+builder.Services.AddSingleton<IReceptionistService, ReceptionistService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
