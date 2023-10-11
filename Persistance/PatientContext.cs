@@ -2,13 +2,19 @@
 using Domain;
 using Domain.Exceptions;
 using Domain.Repositories;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
 namespace Persistance
 {
     public class PatientContext : IPatientRepository
     {
-        private NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=QwErTy135790;");
+        private NpgsqlConnection connection;
+
+        public PatientContext(IConfiguration configuration) 
+        {
+            connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
+        }
 
         public async Task<Patient> CreateAsync(Patient _patient, CancellationToken token)
         {
@@ -40,11 +46,11 @@ namespace Persistance
         {
             connection.Open();
 
-            var patientList = (List<Patient>) await connection.QueryAsync<Patient>($"SELECT * From Patient");
+            var patients = (List<Patient>)await connection.QueryAsync<Patient>("SELECT * FROM public.\"Patient\" ORDER BY \"Id\" ASC\r\n");
 
             connection.Close();
 
-            return patientList;
+            return patients;
         }
 
         public async Task<Patient> GetByIdAsync(Guid patientId, CancellationToken cancellationToken = default)

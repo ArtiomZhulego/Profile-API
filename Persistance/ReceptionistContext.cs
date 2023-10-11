@@ -3,12 +3,18 @@ using Domain;
 using Domain.Repositories;
 using Domain.Exceptions;
 using Npgsql;
+using Microsoft.Extensions.Configuration;
 
 namespace Persistance
 {
     public class ReceptionistContext : IReceptionistRepository
     {
-        private NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=QwErTy135790;");
+        private NpgsqlConnection connection;
+
+        public ReceptionistContext(IConfiguration configuration) 
+        {
+            connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
+        }
 
         public async Task<Receptionist> CreateAsync(Receptionist _receptionist, CancellationToken token)
         {
@@ -40,7 +46,7 @@ namespace Persistance
         {
             connection.Open();
 
-            var receptionistsList = (List<Receptionist>) await connection.QueryAsync<Receptionist>("SELECT * FROM Receptionist");
+            var receptionistsList = (List<Receptionist>) await connection.QueryAsync<Receptionist>("SELECT * FROM public.\"Receptionist\" ORDER BY \"Id\" ASC\r\n");
 
             connection.Close();
 

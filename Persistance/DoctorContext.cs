@@ -20,8 +20,7 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"INSERT INTO Doctor " +
-                                                                    $"(Photo, FirstName, MiddleName, LastName, DateOfBirth, Email, SpecializationId, OfficeId, CareerStartYear, DoctorStatuses)" +
+            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\")" +
                                                                     $"VALUES ({_doctor.Photo},{_doctor.FirstName},{_doctor.MiddleName},{_doctor.LastName}," +
                                                                     $"{_doctor.DateOfBirth},{_doctor.Email},{_doctor.SpecializationId},{_doctor.OfficeId},{_doctor.CareerStartYear},{_doctor.DoctorStatuses})");
 
@@ -34,7 +33,7 @@ namespace Persistance
         {
             connection.Open();
 
-            await connection.QueryAsync($"DELETE FROM Doctor Where Doctor.Id = {doctorId}");
+            await connection.QueryAsync($"DELETE FROM public.\"Doctor\" Where \"Id\" = {doctorId}");
 
             connection.Close();
         }
@@ -43,8 +42,8 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctor = (List<Doctor>) await connection.QueryAsync<Doctor>($"SELECT * From Doctor" +
-                                                                            $"WHERE Doctor.SpecializationId = {specialityId}");
+            var doctor = (List<Doctor>) await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
+                                                                            $"WHERE \"SpecializationId\" = '{specialityId}'");
 
             connection.Close();
 
@@ -55,18 +54,20 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctorsList = connection.QueryAsync<Doctor>($"SELECT * From Doctor").Result.ToList();
+            var doctors = (List<Doctor>)await connection.QueryAsync<Doctor>("SELECT \"Id\", \"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\"\r\n" +
+                                                                            "FROM public.\"Doctor\";");
 
             connection.Close();
 
-            return doctorsList;
+            return doctors;
         }
 
         public async Task<Doctor> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default)
         {
             connection.Open();
 
-            var doctor = (Doctor) await connection.QueryAsync<Doctor>($"SELECT * From Doctor WHERE Doctor.Id = {doctorId}");
+            var doctor = connection.QueryAsync<Doctor>($"SELECT \"Id\", \"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\"\r\n" +
+                                                       $"FROM public.\"Doctor\" WHERE \"Id\" = '{doctorId}';").Result.FirstOrDefault();
 
             connection.Close();
 
@@ -83,9 +84,7 @@ namespace Persistance
             connection.Open();
 
             var doctorsList = (List<Doctor>)await connection.QueryAsync<Doctor>($"SELECT * From Doctor " +
-                                                                                $"WHERE Doctor.FirstName LIKE {fullName} OR " +
-                                                                                $"Doctor.MiddleName LIKE {fullName} OR" +
-                                                                                $"Doctor.LastName LIKE {fullName}");
+                                                                                $"\"FirstName\" LIKE '{fullName}', \"MiddleName\" LIKE '{fullName}', \"LastName\" LIKE '{fullName}'");
 
             connection.Close();
 
@@ -96,16 +95,9 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE Doctor SET Doctor.DoctorStatuse = {_doctor.DoctorStatuses} " +
-                                                                     $"AND Doctor.Photo = {_doctor.Photo} " +
-                                                                     $"AND Doctor.FirstName = {_doctor.FirstName}" +
-                                                                     $"AND Doctor.MiddleName = {_doctor.MiddleName}" +
-                                                                     $"AND Doctor.DateOfBirth = {_doctor.DateOfBirth}" +
-                                                                     $"AND Doctor.Email = {_doctor.Email}" +
-                                                                     $"AND Doctor.SpecializationId = {_doctor.SpecializationId}" +
-                                                                     $"AND Doctor.OfficeId = {_doctor.OfficeId}" +
-                                                                     $"AND Doctor.CareerStartYear = {_doctor.CareerStartYear}" +
-                                                                     $"WhHERE Doctor.Id = {_doctor.Id}");
+            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\"" +
+                                                                    $"SET \"Id\" = '{_doctor.Id}', \"Photo\" = '{_doctor.Photo}', \"FirstName\" = '{_doctor.FirstName}', \"MiddleName\" = '{_doctor.MiddleName}', \"LastName\" = '{_doctor.LastName}', \"DateOfBirth\" = '{_doctor.DateOfBirth}', \"Email\" = '{_doctor.Email}', \"SpecializationId\" = '{_doctor.SpecializationId}', \"OfficeId\" = '{_doctor.OfficeId}', \"CareerStartYear\" = '{_doctor.CareerStartYear}', \"DoctorStatuses\" = '{_doctor.DoctorStatuses}'" +
+                                                                    $"WHERE \"Id\" = '{doctorId}';");
 
             connection.Close();
 
@@ -116,7 +108,7 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE FROM Doctor SET Doctor.DoctorStatuse = {(DoctorStatuses) statuseId}");
+            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE FROM public.\"Doctor\" SET \"DoctorStatuses\" = '{(DoctorStatuses) statuseId}' WHERE \"Id\" = '{doctorId}'");
 
             connection.Close();
 

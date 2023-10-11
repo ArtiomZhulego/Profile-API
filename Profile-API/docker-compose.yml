@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  profile-api:
+    image: ${DOCKER_REGISTRY-}profileapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: QwErTy135790
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432

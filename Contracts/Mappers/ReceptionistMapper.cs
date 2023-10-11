@@ -8,6 +8,7 @@ namespace Contracts.CreatingDto
         {
             var receptionist = new ReceptionistDTO()
             {
+                Id = _receptionist.Id,
                 Email = _receptionist.Email,
                 FirstName = _receptionist.FirstName,
                 LastName = _receptionist.LastName,   
@@ -23,6 +24,7 @@ namespace Contracts.CreatingDto
         {
             var receptionists = _receptionists.ConvertAll(_receptionist => new ReceptionistDTO()
             {
+                Id = _receptionist.Id,
                 Email = _receptionist.Email,
                 FirstName = _receptionist.FirstName,
                 LastName = _receptionist.LastName,
@@ -38,6 +40,7 @@ namespace Contracts.CreatingDto
         {
             var receptionist = new Receptionist()
             {
+                Id = _receptionist.Id,
                 Email = _receptionist.Email,
                 FirstName = _receptionist.FirstName,
                 LastName = _receptionist.LastName,
