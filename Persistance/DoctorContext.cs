@@ -54,8 +54,7 @@ namespace Persistance
         {
             connection.Open();
 
-            var doctors = (List<Doctor>)await connection.QueryAsync<Doctor>("SELECT \"Id\", \"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\"\r\n" +
-                                                                            "FROM public.\"Doctor\";");
+            var doctors = (List<Doctor>)await connection.QueryAsync<Doctor>("SELECT \"Id\", \"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\" FROM public.\"Doctor\";");
 
             connection.Close();
 

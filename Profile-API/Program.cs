@@ -26,18 +26,23 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+/*app.UseHttpsRedirection();*/
 
 app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
+
+MigrationService service = new MigrationService(builder.Configuration);
+service.Migrate();
 
 app.Run();
