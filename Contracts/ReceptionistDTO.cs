@@ -15,5 +15,7 @@
         public Guid OfficeId { get; set; }
 
         public string? Photo { get; set; }
+
+        public Guid AccountId { get; set; }
     }
 }

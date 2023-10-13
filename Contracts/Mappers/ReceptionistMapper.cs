@@ -15,6 +15,7 @@ namespace Contracts.CreatingDto
                 MiddleName = _receptionist.MiddleName,
                 OfficeId = _receptionist.OfficeId,
                 Photo = _receptionist.Photo,
+                AccountId = _receptionist.AccountId,
             };
 
             return receptionist;
@@ -31,6 +32,7 @@ namespace Contracts.CreatingDto
                 MiddleName = _receptionist.MiddleName,
                 OfficeId = _receptionist.OfficeId,
                 Photo = _receptionist.Photo,
+                AccountId = _receptionist.AccountId,
             });
 
             return receptionists;
@@ -47,6 +49,7 @@ namespace Contracts.CreatingDto
                 MiddleName = _receptionist.MiddleName,
                 OfficeId = _receptionist.OfficeId,
                 Photo = _receptionist.Photo,
+                AccountId = _receptionist.AccountId,
             };
 
             return receptionist;

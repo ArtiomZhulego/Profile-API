@@ -25,5 +25,7 @@ namespace Contracts
         public DateOnly CareerStartYear { get; set; }
 
         public DoctorStatuses DoctorStatuses { get; set; }
+
+        public Guid AccountId { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Contracts.CreatingDto
                 MiddleName = _patient.MiddleName,
                 PhoneNumber = _patient.PhoneNumber,
                 Photo = _patient.Photo,
+                AccountId = _patient.AccountId,
             };
 
             return patient;
@@ -31,6 +32,7 @@ namespace Contracts.CreatingDto
                 MiddleName = _patient.MiddleName,
                 PhoneNumber = _patient.PhoneNumber,
                 Photo = _patient.Photo,
+                AccountId = _patient.AccountId,
             });
 
             return patients;
@@ -47,6 +49,7 @@ namespace Contracts.CreatingDto
                 MiddleName = patientDTO.MiddleName,
                 PhoneNumber = patientDTO.PhoneNumber,
                 Photo = patientDTO.Photo,
+                AccountId = patientDTO.AccountId,
             };
 
             return patient;

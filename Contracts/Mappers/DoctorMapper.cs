@@ -18,7 +18,8 @@ namespace Contracts.CreatingDto
                 LastName = _doctor.LastName,
                 MiddleName = _doctor.MiddleName,
                 OfficeId = _doctor.OfficeId,
-                Photo = _doctor.Photo
+                Photo = _doctor.Photo,
+                AccountId = _doctor.AccountId,               
             };
 
             return doctor;
@@ -38,7 +39,8 @@ namespace Contracts.CreatingDto
                 LastName = doctor.LastName,
                 MiddleName = doctor.MiddleName,
                 OfficeId = doctor.OfficeId,
-                Photo = doctor.Photo
+                Photo = doctor.Photo,
+                AccountId = doctor.AccountId,
             });
 
             return doctors;
@@ -58,7 +60,8 @@ namespace Contracts.CreatingDto
                 LastName = doctorDTO.LastName,
                 MiddleName = doctorDTO.MiddleName,
                 OfficeId = doctorDTO.OfficeId,
-                Photo = doctorDTO.Photo
+                Photo = doctorDTO.Photo,
+                AccountId = doctorDTO.AccountId,
             };
 
             return doctor;
