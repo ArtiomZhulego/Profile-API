@@ -16,6 +16,7 @@ namespace Contracts.CreatingDto
                 PhoneNumber = _patient.PhoneNumber,
                 Photo = _patient.Photo,
                 AccountId = _patient.AccountId,
+                Email = _patient.Email,
             };
 
             return patient;
@@ -33,6 +34,7 @@ namespace Contracts.CreatingDto
                 PhoneNumber = _patient.PhoneNumber,
                 Photo = _patient.Photo,
                 AccountId = _patient.AccountId,
+                Email = _patient.Email,
             });
 
             return patients;
@@ -50,6 +52,7 @@ namespace Contracts.CreatingDto
                 PhoneNumber = patientDTO.PhoneNumber,
                 Photo = patientDTO.Photo,
                 AccountId = patientDTO.AccountId,
+                Email = patientDTO.Email,
             };
 
             return patient;

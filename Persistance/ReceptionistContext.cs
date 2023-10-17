@@ -20,8 +20,8 @@ namespace Persistance
         {
             connection.Open();
 
-            var receptionist = (Receptionist) await connection.QueryAsync<Receptionist>($"INSERT INTO Receptionist (FirstName, MiddleName, LastName, Email, OfficeId, Photo) " +
-                                                                                        $"VALUES ({_receptionist.FirstName},{_receptionist.MiddleName},{_receptionist.LastName},{_receptionist.Email},{_receptionist.OfficeId},{_receptionist.Photo})");
+            var receptionist = await connection.QueryAsync<Receptionist>($"INSERT INTO public.\"Receptionist\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Email\", \"OfficeId\", \"Photo\") " +
+                                                                                        $"VALUES (@FirstName,@MiddleName,@LastName,@Email,@OfficeId,@Photo)", _receptionist);
 
             connection.Close();
 
@@ -30,14 +30,14 @@ namespace Persistance
                 throw new BadRequestException("Receptionist does not created");
             }
 
-            return receptionist;
+            return receptionist.FirstOrDefault();
         }
 
         public async Task DeleteAsync(Guid receptionistId, CancellationToken token)
         {
             connection.Open();
 
-            await connection.QueryAsync<Receptionist>($"DELETE FROM Receptionist WHERE Receptionist.Id = {receptionistId}");
+            await connection.QueryAsync<Receptionist>($"DELETE FROM public.\"Receptionist\" WHERE \"Id\" = @Id",new { Id = receptionistId });
 
             connection.Close();
         }
@@ -57,7 +57,7 @@ namespace Persistance
         {
             connection.Open();
 
-            var receptionist = (Receptionist)await connection.QueryAsync<Receptionist>($"SELECT * FROM Receptionist WHERE Receptionist.Id = {receptionistId}");
+            var receptionist = (Receptionist)await connection.QueryAsync<Receptionist>($"SELECT * FROM public.\"Receptionist\" WHERE \"Id\" = @Id", new { Id = receptionistId});
 
             if (receptionist == null) 
             { 
@@ -73,12 +73,13 @@ namespace Persistance
         {
             connection.Open();
 
-            var receptionist = (Receptionist) await connection.QueryAsync<Receptionist>($"UPDATE Receptionist SET Receptionist.FistName = {_receptionist.FirstName}" +
-                                                                                        $"AND Receptionist.MiddleName = {_receptionist.MiddleName}" +
-                                                                                        $"AND Receptionist.LastName = {_receptionist.LastName}" +
-                                                                                        $"AND Receptionist.Email = {_receptionist.Email}" +
-                                                                                        $"AND Receptionist.OfficeId = {_receptionist.OfficeId}" +
-                                                                                        $"AND Receptionist.Photo = {_receptionist.Photo}");
+            var receptionist = (Receptionist) await connection.QueryAsync<Receptionist>($"UPDATE Receptionist SET \"FistName\" = @FistName" +
+                                                                                        $"AND \"MiddleName\" = @MiddleName" +
+                                                                                        $"AND \"LastName\" = @LastName" +
+                                                                                        $"AND \"Email\" = @Email" +
+                                                                                        $"AND \"OfficeId\" = @OfficeId" +
+                                                                                        $"AND \"Photo\" = @Photo" +
+                                                                                        $"WHERE \"Id\" = @Id",_receptionist);
 
             connection.Close();
 

@@ -18,33 +18,42 @@ namespace Persistance
 
         public async Task<Patient> CreateAsync(Patient _patient, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+            
+            await connection.QueryAsync<Patient>($"INSERT INTO public.\"Patient\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Photo\", \"PhoneNumber\", \"DateOfBirth\",\"AccountId\",\"Email\") " +
+                                                                         $"VALUES (@Id,@FirstName,@MiddleName,@LastName,@Photo,@PhoneNumber,@DateOfBirth,@AccountId,@Email)",_patient);
 
-            var patient = (Patient) await connection.QueryAsync<Patient>($"INSERT INTO Patient (FirstName, MiddleName, LastName, Photo, PhoneNumber, DateOfBirth)" +
-                                                                         $"VALUES ({_patient.FirstName},{_patient.MiddleName},{_patient.LastName},{_patient.Photo},{_patient.PhoneNumber},{_patient.DateOfBirth})");
-
-            if (patient == null)
+            if (_patient == null)
             {
                 throw new BadRequestException($"Patient with {_patient.Id} identifier does not created");
             }
 
             connection.Close();
 
-            return patient;
+            return _patient;
         }
 
         public async Task DeleteAsync(Guid patientId, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
 
-            await connection.QueryAsync($"DELETE FROM Patient Where Patient.Id = {patientId}");
+            await connection.QueryAsync($"DELETE FROM public.\"Patient\" WHERE \"Id\" = @Id", new { Id = patientId });
 
             connection.Close();
         }
 
         public async Task<List<Patient>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
 
             var patients = (List<Patient>)await connection.QueryAsync<Patient>("SELECT * FROM public.\"Patient\" ORDER BY \"Id\" ASC\r\n");
 
@@ -55,9 +64,14 @@ namespace Persistance
 
         public async Task<Patient> GetByIdAsync(Guid patientId, CancellationToken cancellationToken = default)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
 
-            var patient = (Patient) await connection.QueryAsync<Patient>($"SELECT * FROM Patient WHERE Patient.Id = {patientId}");
+
+
+            var patient = await connection.QueryAsync<Patient>($"SELECT * FROM public.\"Patient\" WHERE \"Id\" = @Id",new { Id = patientId});
 
             connection.Close();
 
@@ -66,17 +80,20 @@ namespace Persistance
                 throw new PatientNotFoundException(patientId);
             }
 
-            return patient;
+            return patient.FirstOrDefault();
         }
 
         public async Task<List<Patient>> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
 
-            var patientsList = (List<Patient>) await connection.QueryAsync<Patient>($"Select * FROM Patient " +
-                                                                                    $"WHERE Patient.FirstName LIKE {fullName} OR " +
-                                                                                    $"Patient.MiddleName LIKE {fullName} OR" +
-                                                                                    $"Patient.LastName LIKE {fullName}");
+            var patientsList = (List<Patient>) await connection.QueryAsync<Patient>($"Select * FROM public.\"Patient\" " +
+                                                                                    $"WHERE \"FirstName\" LIKE @FirstName OR " +
+                                                                                    $"\"MiddleName\" LIKE @MiddleName OR" +
+                                                                                    $"\"LastName\" LIKE @LastName",new { FirstName = fullName, MiddleName = fullName, LastName = fullName});
 
             connection.Close();
 
@@ -85,14 +102,20 @@ namespace Persistance
 
         public async Task<Patient> UpdateAsync(Guid patientId, Patient newPatient, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
 
-            var patient = (Patient) await connection.QueryAsync<Patient>($"UPDATE Patient SET Patient.FirstName = {newPatient.FirstName}" +
-                                                                         $"AND Patient.MiddleName = {newPatient.MiddleName}" +
-                                                                         $"AND Patient.LastName = {newPatient.LastName}" +
-                                                                         $"AND Patient.Photo = {newPatient.Photo}" +
-                                                                         $"AND Patient.PhoneNumber = {newPatient.PhoneNumber} " +
-                                                                         $"AND Patient.DateOfBirth = {newPatient.DateOfBirth}");
+            var patient = (Patient) await connection.QueryAsync<Patient>($"UPDATE Patient SET \"FirstName\" = @FirstName" +
+                                                                         $"AND \"MiddleName\" = @MiddleName" +
+                                                                         $"AND \"LastName\" = @LastName" +
+                                                                         $"AND \"Photo\" = @Photo" +
+                                                                         $"AND \"PhoneNumber\" = @PhoneNumber" +
+                                                                         $"AND \"DateOfBirth\" = @DateOfBirth" +
+                                                                         $"AND \"AccountId\" = @AccountId" +
+                                                                         $"AND \"Email\" = @Email" +
+                                                                         $"WHERE \"Id\" = @Id", newPatient);
 
             connection.Close();
 

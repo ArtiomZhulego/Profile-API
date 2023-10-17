@@ -16,14 +16,14 @@ namespace Services
         public async void Migrate()
         {
             connection.Open();
-            
+
             connection.Execute("CREATE TABLE IF NOT EXISTS public.\"Doctor\" ( \"Id\" uuid NOT NULL," +
-                               "\"Photo\" \"char\"[], " +
-                               "\"FirstName\" \"char\"[] NOT NULL," +
-                               "\"MiddleName\" \"char\"[] NOT NULL," +
-                               "\"LastName\" \"char\"[]," +
+                               "\"Photo\" \"varchar\", " +
+                               "\"FirstName\" \"varchar\" NOT NULL," +
+                               "\"MiddleName\" \"varchar\" NOT NULL," +
+                               "\"LastName\" \"varchar\"," +
                                "\"DateOfBirth\" date NOT NULL," +
-                               "\"Email\" \"char\"[]," +
+                               "\"Email\" \"varchar\"," +
                                "\"SpecializationId\" uuid NOT NULL," +
                                "\"OfficeId\" uuid NOT NULL," +
                                "\"CareerStartYear\" date NOT NULL," +
@@ -31,20 +31,22 @@ namespace Services
                                "CONSTRAINT doctor_pkey PRIMARY KEY (\"Id\")\r\n)");
 
             connection.Execute("CREATE TABLE IF NOT EXISTS public.\"Patient\"" +
-                               "(\"Id\" uuid NOT NULL," +
-                               " \"FirstName\" \"char\"[] NOT NULL," +
-                               " \"MiddleName\" \"char\"[], " +
-                               " \"LastName\" \"char\"[] NOT NULL," +
-                               " \"Photo\" \"char\"[], " +
+                               "(\"Id\" uuid  NOT NULL," +
+                               " \"FirstName\" \"varchar\" NOT NULL," +
+                               " \"MiddleName\" \"varchar\", " +
+                               " \"Email\" \"varchar\", " +
+                               " \"LastName\" \"varchar\" NOT NULL," +
+                               " \"Photo\" \"varchar\", " +
                                " \"PhoneNumber\" bigint, " +
+                               " \"AccountId\" uuid, " +
                                " \"DateOfBirth\" date NOT NULL )");
             connection.Execute("CREATE TABLE IF NOT EXISTS public.\"Receptionist\" (\"Id\" uuid NOT NULL," +
-                               " \"FirstName\" \"char\"[] NOT NULL," +
-                               " \"LastName\" \"char\"[]," +
-                               " \"MiddleName\" \"char\"[]," +
-                               " \"Email\" \"char\"[], " +
+                               " \"FirstName\" \"varchar\" NOT NULL," +
+                               " \"LastName\" \"varchar\"," +
+                               " \"MiddleName\" \"varchar\"," +
+                               " \"Email\" \"varchar\", " +
                                " \"OfficeId\" uuid NOT NULL, " +
-                               " \"Photo\" \"char\"[])");
+                               " \"Photo\" \"varchar\")");
 
             connection.Close();
         }

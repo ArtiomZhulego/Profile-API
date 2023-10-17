@@ -39,6 +39,19 @@ namespace Presentation
         }
 
         /// <summary>
+        /// View patient email with identification
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>Patient Email</returns>
+        [HttpGet("{patientId:guid}/email")]
+        public async Task<IActionResult> GetPatientEmailAsync(Guid patientId, CancellationToken token)
+        {
+            var patientDTO = await patientService.GetByIdAsync(patientId, token);
+
+            return Ok(patientDTO.Email);
+        }
+
+        /// <summary>
         /// Update Patient
         /// </summary>
         /// <param name="patientId"></param>
