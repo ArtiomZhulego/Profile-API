@@ -7,11 +7,11 @@ using Npgsql;
 
 namespace Persistance
 {
-    public class PatientContext : IPatientRepository
+    public class PatientRepository : IPatientRepository
     {
         private NpgsqlConnection connection;
 
-        public PatientContext(IConfiguration configuration) 
+        public PatientRepository(IConfiguration configuration) 
         {
             connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
@@ -19,17 +19,11 @@ namespace Persistance
         public async Task<Patient> CreateAsync(Patient _patient, CancellationToken token)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-            {
-                connection.Open();
-            }
+                connection.Open(); 
             
             await connection.QueryAsync<Patient>($"INSERT INTO public.\"Patient\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Photo\", \"PhoneNumber\", \"DateOfBirth\",\"AccountId\",\"Email\") " +
                                                                          $"VALUES (@Id,@FirstName,@MiddleName,@LastName,@Photo,@PhoneNumber,@DateOfBirth,@AccountId,@Email)",_patient);
 
-            if (_patient == null)
-            {
-                throw new BadRequestException($"Patient with {_patient.Id} identifier does not created");
-            }
 
             connection.Close();
 
@@ -38,10 +32,8 @@ namespace Persistance
 
         public async Task DeleteAsync(Guid patientId, CancellationToken token)
         {
-            if (connection.State == System.Data.ConnectionState.Closed)
-            {
-                connection.Open();
-            }
+            if (connection.State == System.Data.ConnectionState.Closed)            
+                connection.Open();  
 
             await connection.QueryAsync($"DELETE FROM public.\"Patient\" WHERE \"Id\" = @Id", new { Id = patientId });
 
@@ -51,10 +43,8 @@ namespace Persistance
         public async Task<List<Patient>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-            {
                 connection.Open();
-            }
-
+            
             var patients = (List<Patient>)await connection.QueryAsync<Patient>("SELECT * FROM public.\"Patient\" ORDER BY \"Id\" ASC\r\n");
 
             connection.Close();
@@ -65,20 +55,11 @@ namespace Persistance
         public async Task<Patient> GetByIdAsync(Guid patientId, CancellationToken cancellationToken = default)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-            {
                 connection.Open();
-            }
-
-
 
             var patient = await connection.QueryAsync<Patient>($"SELECT * FROM public.\"Patient\" WHERE \"Id\" = @Id",new { Id = patientId});
 
             connection.Close();
-
-            if (patient == null)
-            {
-                throw new PatientNotFoundException(patientId);
-            }
 
             return patient.FirstOrDefault();
         }
@@ -86,9 +67,7 @@ namespace Persistance
         public async Task<List<Patient>> SearchByNameAsync(string fullName, CancellationToken token)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-            {
                 connection.Open();
-            }
 
             var patientsList = (List<Patient>) await connection.QueryAsync<Patient>($"Select * FROM public.\"Patient\" " +
                                                                                     $"WHERE \"FirstName\" LIKE @FirstName OR " +
@@ -103,9 +82,7 @@ namespace Persistance
         public async Task<Patient> UpdateAsync(Guid patientId, Patient newPatient, CancellationToken token)
         {
             if (connection.State == System.Data.ConnectionState.Closed)
-            {
                 connection.Open();
-            }
 
             var patient = (Patient) await connection.QueryAsync<Patient>($"UPDATE Patient SET \"FirstName\" = @FirstName" +
                                                                          $"AND \"MiddleName\" = @MiddleName" +

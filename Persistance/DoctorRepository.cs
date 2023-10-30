@@ -7,18 +7,19 @@ using Npgsql;
 
 namespace Persistance
 {
-    public class DoctorContext : IDoctorRepository
+    public class DoctorRepository : IDoctorRepository
     {
         private NpgsqlConnection connection;
 
-        public DoctorContext(IConfiguration configuration)
+        public DoctorRepository(IConfiguration configuration)
         {
             connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
         public async Task<Doctor> CreateAsync(Doctor _doctor, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctor = await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\")" +
                                                              $"VALUES (@Id,@Photo,@FirstName,@MiddleName,@LastName,@DateOfBirth,@Email,@SpecializationId,@OfficeId,@CareerStartYear,@DoctorStatuses)",_doctor);
@@ -30,7 +31,8 @@ namespace Persistance
 
         public async Task DeleteAsync(Guid doctorId, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             await connection.QueryAsync($"DELETE FROM public.\"Doctor\" Where \"Id\" = {doctorId}");
 
@@ -39,7 +41,8 @@ namespace Persistance
 
         public async Task<List<Doctor>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctor = (List<Doctor>) await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
                                                                             $"WHERE \"SpecializationId\" = @SpecializationId",new { SpecializationId = specialityId});
@@ -51,7 +54,8 @@ namespace Persistance
 
         public async Task<List<Doctor>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctors = (List<Doctor>)await connection.QueryAsync<Doctor>("SELECT * FROM public.\"Doctor\"");
 
@@ -62,24 +66,21 @@ namespace Persistance
 
         public async Task<Doctor> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctor = await connection.QueryAsync<Doctor>($"SELECT * " +
                                                              $"FROM public.\"Doctor\" WHERE \"Id\" = @Id",new { Id = doctorId });
 
             connection.Close();
 
-            if (doctor == null)
-            {
-                throw new DoctorNotFoundException(doctorId);
-            }
-
             return doctor.FirstOrDefault();
         }
 
         public async Task<List<Doctor>> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctorsList = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\" " +
                                                                   $"\"FirstName\" LIKE @FirstName, \"MiddleName\" LIKE @MiddleName, \"LastName\" LIKE @LastName", new { FirstName = fullName, MiddleName = fullName, LastName = fullName });
@@ -91,7 +92,8 @@ namespace Persistance
 
         public async Task<Doctor> UpdateAsync(Guid doctorId, Doctor _doctor, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
 
             var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET" +
                                                                     $"\"Photo\" = @Photo, " +
@@ -113,10 +115,12 @@ namespace Persistance
 
         public async Task<Doctor> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token)
         {
-            connection.Open();
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();  
 
             var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE FROM public.\"Doctor\" SET " +
-                                                                     $"\"DoctorStatuses\" = @DoctorStatuses WHERE \"Id\" = @doctorId", new { DoctorStatuses = (DoctorStatuses)statuseId, doctorId = doctorId });
+                                                                     $"\"DoctorStatuses\" = @DoctorStatuses WHERE \"Id\" = @doctorId",
+                                                                     new { DoctorStatuses = (DoctorStatuses)statuseId, doctorId });
 
             connection.Close();
 

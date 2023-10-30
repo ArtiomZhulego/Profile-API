@@ -9,9 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IDoctorRepository, DoctorContext>();
-builder.Services.AddSingleton<IPatientRepository, PatientContext>();
-builder.Services.AddSingleton<IReceptionistRepository, ReceptionistContext>();
+builder.Services.AddSingleton<IDoctorRepository, DoctorRepository>();
+builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
+builder.Services.AddSingleton<IReceptionistRepository, ReceptionistRepository>();
 
 builder.Services.AddSingleton<IDoctorService, DoctorService>();
 builder.Services.AddSingleton<IPatientService, PatientService>();
