@@ -23,7 +23,6 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { });
 });
 
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -37,8 +36,5 @@ app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
-
-MigrationService service = new MigrationService(builder.Configuration);
-service.Migrate();
 
 app.Run();

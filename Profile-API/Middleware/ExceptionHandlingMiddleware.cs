@@ -37,14 +37,14 @@ namespace Profile_API.Middleware
 
                 message = exception.Message;
             }
-            else if (exception is DoctorNotFoundException || exception is PatientNotFoundException || exception is ReceptionistNotFoundException)
+            else if (exception is EntityNotFoundException)
             {
                 statusCode = HttpStatusCode.NotFound;
 
                 message = exception.Message;
             }
 
-            var result = JsonConvert.SerializeObject(new { error = exception.Message });
+            var result = JsonConvert.SerializeObject(new { error = message });
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;

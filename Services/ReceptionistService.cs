@@ -45,7 +45,7 @@ namespace Services
 
             if (_receptionist is null)
             {
-                throw new DoctorNotFoundException(receptionistId);
+                throw new EntityNotFoundException("Receptionist not found");
             }
 
             await _repository.UpdateAsync(receptionistId, ReceptionistMapper.MapToReceptionist(receptionist), token);

@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain;
-using Domain.Exceptions;
 using Domain.Repositories;
 using Microsoft.Extensions.Configuration;
 using Npgsql;

@@ -50,7 +50,7 @@ namespace Services
 
             if (doctor is null)
             {
-                throw new DoctorNotFoundException(doctorId);
+                throw new EntityNotFoundException("Doctor not found");
             }
 
             await _repository.UpdateStatusAsync(doctorId, statuseId, token);
@@ -69,7 +69,7 @@ namespace Services
 
             if (_doctor is null)
             {
-                throw new DoctorNotFoundException(doctorId);
+                throw new EntityNotFoundException("Doctor not found");
             }
 
             await _repository.UpdateAsync(doctorId, DoctorMapper.MapToDoctor(doctor), token);

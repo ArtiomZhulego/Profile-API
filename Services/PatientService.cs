@@ -50,7 +50,7 @@ namespace Services
 
             if (patient is null)
             {
-                throw new DoctorNotFoundException(patientId);
+                throw new EntityNotFoundException("Patient not found");
             }
 
             await _repository.UpdateAsync(patientId, PatientMapper.MapToPatient(newPatient), token);
