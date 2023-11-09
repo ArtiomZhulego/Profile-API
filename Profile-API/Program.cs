@@ -5,36 +5,46 @@ using Profile_API.Middleware;
 using Services;
 using Services.Abstraction;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-
-builder.Services.AddSingleton<IDoctorRepository, DoctorRepository>();
-builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
-builder.Services.AddSingleton<IReceptionistRepository, ReceptionistRepository>();
-
-builder.Services.AddSingleton<IDoctorService, DoctorService>();
-builder.Services.AddSingleton<IPatientService, PatientService>();
-builder.Services.AddSingleton<IReceptionistService, ReceptionistService>();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+namespace Profile_API
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { });
-});
+    public class Program
+    {
+        private static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+            builder.Services.AddControllers();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            builder.Services.AddSingleton<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
+            builder.Services.AddSingleton<IReceptionistRepository, ReceptionistRepository>();
+
+            builder.Services.AddSingleton<IDoctorService, DoctorService>();
+            builder.Services.AddSingleton<IPatientService, PatientService>();
+            builder.Services.AddSingleton<IReceptionistService, ReceptionistService>();
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { });
+            });
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
 }
-
-app.UseAuthorization();
-
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-app.MapControllers();
-
-app.Run();
+    

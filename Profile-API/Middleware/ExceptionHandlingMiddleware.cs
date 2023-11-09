@@ -44,7 +44,7 @@ namespace Profile_API.Middleware
                 message = exception.Message;
             }
 
-            var result = JsonConvert.SerializeObject(new { error = message });
+            var result = JsonConvert.SerializeObject(new { error = exception.Message });
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
