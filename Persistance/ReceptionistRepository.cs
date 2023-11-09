@@ -17,10 +17,10 @@ namespace Persistance
 
         public async Task<Receptionist> CreateAsync(Receptionist _receptionist, CancellationToken token)
         {
-            var receptionist = await connection.QueryAsync<Receptionist>($"INSERT INTO public.\"Receptionist\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Email\", \"OfficeId\", \"Photo\") " +
-                                                                                        $"VALUES (@FirstName,@MiddleName,@LastName,@Email,@OfficeId,@Photo)", _receptionist);
+            await connection.QueryAsync<Receptionist>($"INSERT INTO public.\"Receptionist\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Email\", \"OfficeId\", \"Photo\")" +
+                                                                         $"VALUES (@FirstName,@MiddleName,@LastName,@Email,@OfficeId,@Photo)", _receptionist);
 
-            return receptionist.FirstOrDefault();
+            return _receptionist;
         }
 
         public async Task DeleteAsync(Guid receptionistId, CancellationToken token)
@@ -30,21 +30,21 @@ namespace Persistance
 
         public async Task<List<Receptionist>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var receptionistsList = (List<Receptionist>) await connection.QueryAsync<Receptionist>("SELECT * FROM public.\"Receptionist\" ORDER BY \"Id\" ASC\r\n");
+            var receptionistsList = await connection.QueryAsync<Receptionist>("SELECT * FROM public.\"Receptionist\" ORDER BY \"Id\" ASC\r\n");
 
-            return receptionistsList;
+            return receptionistsList.ToList();
         }
 
         public async Task<Receptionist> GetByIdAsync(Guid receptionistId, CancellationToken cancellationToken = default)
         {
-            var receptionist = (Receptionist)await connection.QueryAsync<Receptionist>($"SELECT * FROM public.\"Receptionist\" WHERE \"Id\" = @Id", new { Id = receptionistId});
+            var receptionist = await connection.QueryAsync<Receptionist>($"SELECT * FROM public.\"Receptionist\" WHERE \"Id\" = @Id", new { Id = receptionistId});
 
-            return receptionist;
+            return receptionist.FirstOrDefault();
         }
 
         public async Task<Receptionist> UpdateAsync(Guid receptionistId, Receptionist _receptionist, CancellationToken token)
         {
-            var receptionist = (Receptionist) await connection.QueryAsync<Receptionist>($"UPDATE Receptionist SET \"FistName\" = @FistName" +
+            await connection.QueryAsync<Receptionist>($"UPDATE Receptionist SET \"FistName\" = @FistName" +
                                                                                         $"AND \"MiddleName\" = @MiddleName" +
                                                                                         $"AND \"LastName\" = @LastName" +
                                                                                         $"AND \"Email\" = @Email" +
@@ -52,7 +52,7 @@ namespace Persistance
                                                                                         $"AND \"Photo\" = @Photo" +
                                                                                         $"WHERE \"Id\" = @Id",_receptionist);
 
-            return receptionist;
+            return _receptionist;
         }
     }
 }

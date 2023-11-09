@@ -17,10 +17,10 @@ namespace Persistance
 
         public async Task<Doctor> CreateAsync(Doctor _doctor, CancellationToken token)
         {
-            var doctor = await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\")" +
+            await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\")" +
                                                              $"VALUES (@Id,@Photo,@FirstName,@MiddleName,@LastName,@DateOfBirth,@Email,@SpecializationId,@OfficeId,@CareerStartYear,@DoctorStatuses)",_doctor);
 
-            return doctor.FirstOrDefault();
+            return _doctor;
         }
 
         public async Task DeleteAsync(Guid doctorId, CancellationToken token)
@@ -30,17 +30,17 @@ namespace Persistance
 
         public async Task<List<Doctor>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token)
         {
-            var doctor = (List<Doctor>) await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
+            var doctor = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
                                                                             $"WHERE \"SpecializationId\" = @SpecializationId",new { SpecializationId = specialityId});
 
-            return doctor;
+            return doctor.ToList();
         }
 
         public async Task<List<Doctor>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var doctors = (List<Doctor>)await connection.QueryAsync<Doctor>("SELECT * FROM public.\"Doctor\"");
+            var doctors = await connection.QueryAsync<Doctor>("SELECT * FROM public.\"Doctor\"");
 
-            return doctors;
+            return doctors.ToList();
         }
 
         public async Task<Doctor> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default)
@@ -61,7 +61,7 @@ namespace Persistance
 
         public async Task<Doctor> UpdateAsync(Guid doctorId, Doctor _doctor, CancellationToken token)
         {
-            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET" +
+            await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET" +
                                                                     $"\"Photo\" = @Photo, " +
                                                                     $"\"FirstName\" = @FirstName, " +
                                                                     $"\"MiddleName\" = @MiddleName, " +
@@ -74,7 +74,7 @@ namespace Persistance
                                                                     $"\"DoctorStatuses\" = @DoctorStatuses" +
                                                                     $"WHERE \"Id\" = @Id",_doctor);
 
-            return doctor;
+            return _doctor;
         }
 
         public async Task<Doctor> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token)
