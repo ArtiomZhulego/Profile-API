@@ -1,9 +1,13 @@
 using Domain.Repositories;
+using FluentMigrator.Runner;
 using Microsoft.OpenApi.Models;
 using Persistance;
+using Persistance.Migration;
 using Profile_API.Middleware;
 using Services;
 using Services.Abstraction;
+using Profile_API.Configuration;
+using System.Reflection;
 
 namespace Profile_API
 {
@@ -15,13 +19,20 @@ namespace Profile_API
 
             builder.Services.AddControllers();
 
+            builder.Services.AddSingleton<Database>();
+            builder.Services.AddSingleton<DapperContext>();
             builder.Services.AddSingleton<IDoctorRepository, DoctorRepository>();
             builder.Services.AddSingleton<IPatientRepository, PatientRepository>();
             builder.Services.AddSingleton<IReceptionistRepository, ReceptionistRepository>();
-
             builder.Services.AddSingleton<IDoctorService, DoctorService>();
             builder.Services.AddSingleton<IPatientService, PatientService>();
             builder.Services.AddSingleton<IReceptionistService, ReceptionistService>();
+
+            builder.Services.AddFluentMigratorCore()
+                            .ConfigureRunner(c => c.AddPostgres()
+                            .WithGlobalConnectionString(new SerivceConfiguration()
+                            .GetConnectionString("DefaultConnection"))
+                            .ScanIn(typeof(Database).Assembly).For.Migrations());
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -42,6 +53,8 @@ namespace Profile_API
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();
+
+            app.MigrateDatabase();
 
             app.Run();
         }

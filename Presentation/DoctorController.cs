@@ -103,7 +103,7 @@ namespace Presentation
         /// <param name="specialityId"></param>
         /// <param name="token"></param>
         /// <returns>No Content</returns>
-        [HttpGet("specialty={specialty}&office={office}")]
+        [HttpGet("{officeId:guid}/{specialityId:guid}")]
         public async Task<IActionResult> FilterDoctorAsyc(Guid officeId, Guid specialityId, CancellationToken token)
         {
             var doctorsDTO = await doctorService.FilterDoctorAsync(officeId, specialityId, token);

@@ -1,6 +1,6 @@
 namespace PatientService.Service.IntegrationTests
 {
-    public class UnitTest1
+    public class PatientService_ServiceTests
     {
         [Fact]
         public void Test1()

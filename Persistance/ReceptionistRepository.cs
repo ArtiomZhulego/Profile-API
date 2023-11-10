@@ -17,8 +17,8 @@ namespace Persistance
 
         public async Task<Receptionist> CreateAsync(Receptionist _receptionist, CancellationToken token)
         {
-            await connection.QueryAsync<Receptionist>($"INSERT INTO public.\"Receptionist\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Email\", \"OfficeId\", \"Photo\")" +
-                                                                         $"VALUES (@FirstName,@MiddleName,@LastName,@Email,@OfficeId,@Photo)", _receptionist);
+            await connection.QueryAsync<Receptionist>($"INSERT INTO public.\"Receptionist\" (\"Id\",\"FirstName\", \"MiddleName\", \"LastName\", \"Email\", \"OfficeId\", \"Photo\", \"AccountId\")" +
+                                                                         $"VALUES (@Id,@FirstName,@MiddleName,@LastName,@Email,@OfficeId,@Photo,@AccountId)", _receptionist);
 
             return _receptionist;
         }
@@ -44,12 +44,13 @@ namespace Persistance
 
         public async Task<Receptionist> UpdateAsync(Guid receptionistId, Receptionist _receptionist, CancellationToken token)
         {
-            await connection.QueryAsync<Receptionist>($"UPDATE Receptionist SET \"FistName\" = @FistName" +
-                                                                                        $"AND \"MiddleName\" = @MiddleName" +
-                                                                                        $"AND \"LastName\" = @LastName" +
-                                                                                        $"AND \"Email\" = @Email" +
-                                                                                        $"AND \"OfficeId\" = @OfficeId" +
-                                                                                        $"AND \"Photo\" = @Photo" +
+            await connection.QueryAsync<Receptionist>($"UPDATE public.\"Receptionist\" SET \"FirstName\" = @FirstName, " +
+                                                                                        $"\"MiddleName\" = @MiddleName," +
+                                                                                        $"\"LastName\" = @LastName," +
+                                                                                        $"\"Email\" = @Email," +
+                                                                                        $"\"OfficeId\" = @OfficeId," +
+                                                                                        $"\"Photo\" = @Photo," +
+                                                                                        $"\"AccountId\" = @AccountId " +
                                                                                         $"WHERE \"Id\" = @Id",_receptionist);
 
             return _receptionist;

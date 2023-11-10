@@ -14,7 +14,7 @@ namespace Contracts
 
         public string? MiddleName { get; set; }
 
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public string Email { get; set; } = string.Empty;
 
@@ -22,7 +22,7 @@ namespace Contracts
 
         public Guid OfficeId { get; set; }
 
-        public DateOnly CareerStartYear { get; set; }
+        public DateTime CareerStartYear { get; set; }
 
         public DoctorStatuses DoctorStatuses { get; set; }
 

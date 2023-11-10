@@ -54,15 +54,15 @@ namespace Persistance
 
         public async Task<Patient> UpdateAsync(Guid patientId, Patient newPatient, CancellationToken token)
         {
-            var patient = await connection.QueryAsync<Patient>($"UPDATE Patient SET \"FirstName\" = @FirstName" +
-                                                                         $"AND \"MiddleName\" = @MiddleName" +
-                                                                         $"AND \"LastName\" = @LastName" +
-                                                                         $"AND \"Photo\" = @Photo" +
-                                                                         $"AND \"PhoneNumber\" = @PhoneNumber" +
-                                                                         $"AND \"DateOfBirth\" = @DateOfBirth" +
-                                                                         $"AND \"AccountId\" = @AccountId" +
-                                                                         $"AND \"Email\" = @Email" +
-                                                                         $"WHERE \"Id\" = @Id", newPatient);
+            var patient = await connection.QueryAsync<Patient>($"UPDATE public.\"Patient\" SET \"FirstName\" = @FirstName, " +
+                                                                         $"\"MiddleName\" = @MiddleName, " +
+                                                                         $"\"LastName\" = @LastName, " +
+                                                                         $"\"Photo\" = @Photo, " +
+                                                                         $"\"PhoneNumber\" = @PhoneNumber, " +
+                                                                         $"\"DateOfBirth\" = @DateOfBirth, " +
+                                                                         $"\"AccountId\" = @AccountId, " +
+                                                                         $"\"Email\" = @Email " +
+                                                                         $"WHERE \"Id\" = @Id ", newPatient);
 
             return patient.FirstOrDefault();
         }

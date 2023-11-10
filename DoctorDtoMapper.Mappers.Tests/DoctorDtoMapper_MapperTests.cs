@@ -15,7 +15,7 @@ namespace DoctorDtoMapper.Mappers.Tests
         }
 
         [Fact]
-        public void MapToDoctor()
+        public void MapToDoctor_ReturnDoctor()
         {
             ///Arrange
             var doctorDto = _fixture.Create<DoctorDTO>();
@@ -29,7 +29,7 @@ namespace DoctorDtoMapper.Mappers.Tests
         }
 
         [Fact]
-        public void MapToDoctorDto()
+        public void MapToDoctorDto_ReturnDoctorDto()
         {
             ///Arrange
             var doctor = _fixture.Create<Doctor>();

@@ -1,6 +1,6 @@
 namespace ReceptionistService.Service.IntegrationTests
 {
-    public class UnitTest1
+    public class ReceptionistService_ServiceTests
     {
         [Fact]
         public void Test1()

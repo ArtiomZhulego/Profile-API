@@ -1,15 +1,13 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
-using Persistance;
+using Persistance.Migration;
 using Profile_API;
 using System.Data;
 
 namespace Factories
 {
-    public class WebAppFactories<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
+    public class WebAppFactory<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
     {
         private IDbConnection _connection;
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -20,7 +18,7 @@ namespace Factories
                 {
                     if (_connection == null)
                     {
-                        _connection = new SqliteConnection("DataSource=:memory:");
+                        _connection = new InMemoryDatabase().OpenConnection();
                         _connection.Open();
                     }
 

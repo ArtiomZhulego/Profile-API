@@ -17,8 +17,8 @@ namespace Persistance
 
         public async Task<Doctor> CreateAsync(Doctor _doctor, CancellationToken token)
         {
-            await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\")" +
-                                                             $"VALUES (@Id,@Photo,@FirstName,@MiddleName,@LastName,@DateOfBirth,@Email,@SpecializationId,@OfficeId,@CareerStartYear,@DoctorStatuses)",_doctor);
+            await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\",\"AccountId\")" +
+                                                             $"VALUES (@Id,@Photo,@FirstName,@MiddleName,@LastName,@DateOfBirth,@Email,@SpecializationId,@OfficeId,@CareerStartYear,@DoctorStatuses,@AccountId)",_doctor);
 
             return _doctor;
         }
@@ -53,8 +53,8 @@ namespace Persistance
 
         public async Task<List<Doctor>> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            var doctorsList = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\" " +
-                                                                  $"\"FirstName\" LIKE @FirstName, \"MiddleName\" LIKE @MiddleName, \"LastName\" LIKE @LastName", new { FirstName = fullName, MiddleName = fullName, LastName = fullName });
+            var doctorsList = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\" WHERE" +
+                                                                  $"\"FirstName\" LIKE @FirstName OR \"MiddleName\" LIKE @MiddleName OR \"LastName\" LIKE @LastName", new { FirstName = fullName, MiddleName = fullName, LastName = fullName });
 
             return doctorsList.ToList();
         }
@@ -71,7 +71,7 @@ namespace Persistance
                                                                     $"\"SpecializationId\" = @SpecializationId, " +
                                                                     $"\"OfficeId\" = @OfficeId, " +
                                                                     $"\"CareerStartYear\" = @CareerStartYear, " +
-                                                                    $"\"DoctorStatuses\" = @DoctorStatuses" +
+                                                                    $"\"DoctorStatuses\" = @DoctorStatuses " +
                                                                     $"WHERE \"Id\" = @Id",_doctor);
 
             return _doctor;
@@ -79,11 +79,11 @@ namespace Persistance
 
         public async Task<Doctor> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token)
         {
-            var doctor = (Doctor)await connection.QueryAsync<Doctor>($"UPDATE FROM public.\"Doctor\" SET " +
-                                                                     $"\"DoctorStatuses\" = @DoctorStatuses WHERE \"Id\" = @doctorId",
-                                                                     new { DoctorStatuses = (DoctorStatuses)statuseId, doctorId });
+            var doctor = await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET " +
+                                                                     $"\"DoctorStatuses\" = @DoctorStatuses WHERE \"Id\" = @DoctorId",
+                                                                     new { DoctorStatuses = statuseId, DoctorId = doctorId });
 
-            return doctor;
+            return doctor.FirstOrDefault();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace ReceptionistDtoMapper.Mappers.Tests
         }
 
         [Fact]
-        public void MapToReceptionist()
+        public void MapToReceptionist_ReturnReceptionist()
         {
             ///Arrange
             var receptionistDto = _fixture.Create<ReceptionistDTO>();
@@ -29,7 +29,7 @@ namespace ReceptionistDtoMapper.Mappers.Tests
         }
 
         [Fact]
-        public void MapToReceptionistDto()
+        public void MapToReceptionistDto_ReturnReceptionistDto()
         {
             ///Arrange
             var receptionist = _fixture.Create<Receptionist>();
