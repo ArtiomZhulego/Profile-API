@@ -4,37 +4,37 @@ namespace Contracts.CreatingDto
 {
     public class PatientMapper
     {
-        public static PatientDTO MapToPatientDto(Patient _patient)
+        public static PatientDTO MapToPatientDto(Patient patient)
         {
-            var patient = new PatientDTO()
+            var patientDto = new PatientDTO()
             {
-                Id = _patient.Id,
-                FirstName = _patient.FirstName,
-                LastName = _patient.LastName,    
-                DateOfBirth = _patient.DateOfBirth,
-                MiddleName = _patient.MiddleName,
-                PhoneNumber = _patient.PhoneNumber,
-                Photo = _patient.Photo,
-                AccountId = _patient.AccountId,
-                Email = _patient.Email,
+                Id = patient.Id,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,    
+                DateOfBirth = patient.DateOfBirth,
+                MiddleName = patient.MiddleName,
+                PhoneNumber = patient.PhoneNumber,
+                Photo = patient.Photo,
+                AccountId = patient.AccountId,
+                Email = patient.Email,
             };
 
-            return patient;
+            return patientDto;
         }
 
-        public static List<PatientDTO> MapToPatientDto(List<Patient> patient)
+        public static IEnumerable<PatientDTO> MapToPatientDto(IEnumerable<Patient> patient)
         {
-            var patients = patient.ConvertAll(_patient => new PatientDTO()
+            var patients = patient.ToList().ConvertAll(patientDto => new PatientDTO()
             {
-                Id = _patient.Id,
-                FirstName = _patient.FirstName,
-                LastName = _patient.LastName,
-                DateOfBirth = _patient.DateOfBirth,
-                MiddleName = _patient.MiddleName,
-                PhoneNumber = _patient.PhoneNumber,
-                Photo = _patient.Photo,
-                AccountId = _patient.AccountId,
-                Email = _patient.Email,
+                Id = patientDto.Id,
+                FirstName = patientDto.FirstName,
+                LastName = patientDto.LastName,
+                DateOfBirth = patientDto.DateOfBirth,
+                MiddleName = patientDto.MiddleName,
+                PhoneNumber = patientDto.PhoneNumber,
+                Photo = patientDto.Photo,
+                AccountId = patientDto.AccountId,
+                Email = patientDto.Email,
             });
 
             return patients;

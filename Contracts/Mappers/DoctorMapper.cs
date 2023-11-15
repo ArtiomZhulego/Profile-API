@@ -4,30 +4,9 @@ namespace Contracts.CreatingDto
 {
     public class DoctorMapper
     {
-        public static DoctorDTO MapToDoctorDto(Doctor _doctor)
+        public static DoctorDTO MapToDoctorDto(Doctor doctor)
         {
-            var doctor = new DoctorDTO()
-            {
-                DateOfBirth = _doctor.DateOfBirth,
-                SpecializationId = _doctor.SpecializationId,
-                DoctorStatuses = _doctor.DoctorStatuses,
-                CareerStartYear = _doctor.CareerStartYear,
-                Email = _doctor.Email,
-                FirstName = _doctor.FirstName,
-                Id = _doctor.Id,
-                LastName = _doctor.LastName,
-                MiddleName = _doctor.MiddleName,
-                OfficeId = _doctor.OfficeId,
-                Photo = _doctor.Photo,
-                AccountId = _doctor.AccountId,               
-            };
-
-            return doctor;
-        }
-
-        public static List<DoctorDTO> MapToDoctorDto(List<Doctor> _doctor)
-        {
-            var doctors = _doctor.ConvertAll(doctor => new DoctorDTO()
+            var doctorDto = new DoctorDTO()
             {
                 DateOfBirth = doctor.DateOfBirth,
                 SpecializationId = doctor.SpecializationId,
@@ -40,7 +19,28 @@ namespace Contracts.CreatingDto
                 MiddleName = doctor.MiddleName,
                 OfficeId = doctor.OfficeId,
                 Photo = doctor.Photo,
-                AccountId = doctor.AccountId,
+                AccountId = doctor.AccountId,               
+            };
+
+            return doctorDto;
+        }
+
+        public static IEnumerable<DoctorDTO> MapToDoctorDto(IEnumerable<Doctor> doctorList)
+        {
+            var doctors = doctorList.ToList().ConvertAll(doctorDto => new DoctorDTO()
+            {
+                DateOfBirth = doctorDto.DateOfBirth,
+                SpecializationId = doctorDto.SpecializationId,
+                DoctorStatuses = doctorDto.DoctorStatuses,
+                CareerStartYear = doctorDto.CareerStartYear,
+                Email = doctorDto.Email,
+                FirstName = doctorDto.FirstName,
+                Id = doctorDto.Id,
+                LastName = doctorDto.LastName,
+                MiddleName = doctorDto.MiddleName,
+                OfficeId = doctorDto.OfficeId,
+                Photo = doctorDto.Photo,
+                AccountId = doctorDto.AccountId,
             });
 
             return doctors;
