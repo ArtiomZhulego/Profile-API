@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
 
@@ -8,9 +9,12 @@ namespace Presentation
     [Route("doctors")]
     public class DoctorController : ControllerBase
     {
-        private readonly IDoctorService doctorService;
+        private readonly IDoctorService _service;
 
-        public DoctorController(IDoctorService doctorService) => this.doctorService = doctorService;
+        public DoctorController(IDoctorService doctorService)
+        {
+            _service = doctorService;
+        }
 
         /// <summary>
         /// View doctors
@@ -20,7 +24,7 @@ namespace Presentation
         [HttpGet]
         public async Task<IActionResult> GetDoctorsAsync(CancellationToken token)
         {
-            var doctorsDTO = await doctorService.GetAllAsync(token);
+            var doctorsDTO = await _service.GetAllAsync(token);
 
             return Ok(doctorsDTO);
         }
@@ -34,7 +38,7 @@ namespace Presentation
         [HttpGet("{doctorId:guid}")]
         public async Task<IActionResult> GetDoctorAsync(Guid doctorId, CancellationToken token)
         {
-            var doctorDTO = await doctorService.GetByIdAsync(doctorId, token);
+            var doctorDTO = await _service.GetByIdAsync(doctorId, token);
 
             return Ok(doctorDTO);
         }
@@ -47,9 +51,9 @@ namespace Presentation
         /// <param name="token"></param>
         /// <returns>Doctor's dto</returns>
         [HttpPatch("{doctorId:guid}")]
-        public async Task<IActionResult> UpdateStatusAsync(Guid doctorId, int statusId, CancellationToken token)
+        public async Task<IActionResult> UpdateStatusAsync(Guid doctorId, DoctorStatuses statusId, CancellationToken token)
         {
-            var doctorDTO = await doctorService.UpdateStatusAsync(doctorId, statusId, token);
+            var doctorDTO = await _service.UpdateStatusAsync(doctorId, statusId, token);
 
             return Ok(doctorDTO);
         }
@@ -64,9 +68,9 @@ namespace Presentation
         [HttpPut("{doctorId:guid}")]
         public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, DoctorDTO doctorDTO, CancellationToken token)
         {
-            var _doctorDTO = await doctorService.UpdateAsync(doctorId, doctorDTO, token);
+            var doctor = await _service.UpdateAsync(doctorId, doctorDTO, token);
 
-            return Ok(_doctorDTO);
+            return Ok(doctor);
         }
 
         /// <summary>
@@ -77,7 +81,7 @@ namespace Presentation
         [HttpPost]
         public async Task<IActionResult> CreateDoctorAsync(DoctorDTO doctorDTO, CancellationToken token)
         {
-            var doctor = await doctorService.CreateAsync(doctorDTO,token);
+            var doctor = await _service.CreateAsync(doctorDTO,token);
 
             return Created($"{doctor.Id}", doctor);
         }
@@ -91,7 +95,7 @@ namespace Presentation
         [HttpDelete("{doctorId:guid}")]
         public async Task<IActionResult> DeleteDoctorAsync(Guid doctorId, CancellationToken token)
         {
-            await doctorService.DeleteAsync(doctorId, token);
+            await _service.DeleteAsync(doctorId, token);
 
             return NoContent();
         }
@@ -106,7 +110,7 @@ namespace Presentation
         [HttpGet("{officeId:guid}/{specialityId:guid}")]
         public async Task<IActionResult> FilterDoctorAsyc(Guid officeId, Guid specialityId, CancellationToken token)
         {
-            var doctorsDTO = await doctorService.FilterDoctorAsync(officeId, specialityId, token);
+            var doctorsDTO = await _service.FilterDoctorAsync(officeId, specialityId, token);
 
             return Ok(doctorsDTO);
         }
@@ -120,7 +124,7 @@ namespace Presentation
         [HttpGet("fullName={fullName}")]
         public async Task<IActionResult> SearchByNameAsync(string fullName, CancellationToken token)
         {
-            var doctorDTO = await doctorService.SearchByNameAsync(fullName, token);
+            var doctorDTO = await _service.SearchByNameAsync(fullName, token);
 
             return Ok(doctorDTO);
         }

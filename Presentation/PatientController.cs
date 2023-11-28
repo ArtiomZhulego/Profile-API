@@ -8,9 +8,12 @@ namespace Presentation
     [Route("patients")]
     public class PatientController : ControllerBase
     {
-        private readonly IPatientService patientService;
+        private readonly IPatientService _service;
 
-        public PatientController(IPatientService patientService) => this.patientService = patientService;
+        public PatientController(IPatientService patientService)
+        {
+            _service = patientService;
+        }
 
         /// <summary>
         /// View patients
@@ -20,7 +23,7 @@ namespace Presentation
         [HttpGet]
         public async Task<IActionResult> GetPatientsAsync(CancellationToken token)
         {
-            var patientDTO = await patientService.GetAllAsync(token);
+            var patientDTO = await _service.GetAllAsync(token);
 
             return Ok(patientDTO);
         }
@@ -33,7 +36,7 @@ namespace Presentation
         [HttpGet("{patientId:guid}")]
         public async Task<IActionResult> GetPatientAsync(Guid patientId, CancellationToken token)
         {
-            var patientDTO = await patientService.GetByIdAsync(patientId, token);
+            var patientDTO = await _service.GetByIdAsync(patientId, token);
 
             return Ok(patientDTO);
         }
@@ -46,7 +49,7 @@ namespace Presentation
         [HttpGet("{patientId:guid}/email")]
         public async Task<IActionResult> GetPatientEmailAsync(Guid patientId, CancellationToken token)
         {
-            var patientDTO = await patientService.GetByIdAsync(patientId, token);
+            var patientDTO = await _service.GetByIdAsync(patientId, token);
 
             return Ok(patientDTO.Email);
         }
@@ -60,9 +63,9 @@ namespace Presentation
         [HttpPut("{patientId:guid}")]
         public async Task<IActionResult> PutPatientAsync(Guid patientId, PatientDTO patientDTO, CancellationToken token)
         {
-            var _patientDTO = await patientService.UpdateAsync(patientId, patientDTO, token);
+            var patient = await _service.UpdateAsync(patientId, patientDTO, token);
 
-            return Ok(_patientDTO);
+            return Ok(patient);
         }
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace Presentation
         [HttpPost]
         public async Task<IActionResult> CreatePatientAsync(PatientDTO patientDTO, CancellationToken token)
         {
-            var patient = await patientService.CreateAsync(patientDTO,token);
+            var patient = await _service.CreateAsync(patientDTO,token);
 
             return Created($"{patient.Id}", patient);
         }
@@ -87,7 +90,7 @@ namespace Presentation
         [HttpDelete("{patientId:guid}")]
         public async Task<IActionResult> DeletePatientAsync(Guid patientId, CancellationToken token)
         {
-            await patientService.DeleteAsync(patientId, token);
+            await _service.DeleteAsync(patientId, token);
 
             return NoContent();
         }

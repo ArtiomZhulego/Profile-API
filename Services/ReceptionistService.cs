@@ -17,19 +17,22 @@ namespace Services
             var reseptionist = await _repository.CreateAsync(ReceptionistMapper.MapToReceptionist(receptionistDTO),token);
 
             if (reseptionist is null)
-            {
-                throw new BadRequestException($"The receptionist could not be created");
-            }
+                throw new BadRequestException($"The receptionist could not be created");       
 
             return ReceptionistMapper.MapToReceptionistDto(reseptionist);
         }
 
         public async Task DeleteAsync(Guid receptionistId, CancellationToken token)
         {
+            var receptionist = await _repository.GetByIdAsync(receptionistId);
+
+            if (receptionist is null)
+                throw new EntityNotFoundException("Receptionist not found");
+
             await _repository.DeleteAsync(receptionistId, token);
         }
 
-        public async Task<List<ReceptionistDTO>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ReceptionistDTO>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return ReceptionistMapper.MapToReceptionistDto(await _repository.GetAllAsync(cancellationToken));
         }
@@ -39,18 +42,16 @@ namespace Services
             return ReceptionistMapper.MapToReceptionistDto(await _repository.GetByIdAsync(receptionistId, cancellationToken));
         }
 
-        public async Task<ReceptionistDTO> UpdateAsync(Guid receptionistId, ReceptionistDTO receptionist, CancellationToken token)
+        public async Task<ReceptionistDTO> UpdateAsync(Guid receptionistId, ReceptionistDTO receptionistDto, CancellationToken token)
         {
-            var _receptionist = await _repository.GetByIdAsync(receptionistId, token);
+            var receptionist = await _repository.GetByIdAsync(receptionistId, token);
 
-            if (_receptionist is null)
-            {
+            if (receptionist is null)
                 throw new EntityNotFoundException("Receptionist not found");
-            }
 
-            await _repository.UpdateAsync(receptionistId, ReceptionistMapper.MapToReceptionist(receptionist), token);
+            await _repository.UpdateAsync(receptionistId, ReceptionistMapper.MapToReceptionist(receptionistDto), token);
 
-            return ReceptionistMapper.MapToReceptionistDto(_receptionist);
+            return receptionistDto;
         }
     }
 }

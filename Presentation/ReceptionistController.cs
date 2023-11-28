@@ -8,9 +8,12 @@ namespace Presentation
     [Route("receptionist")]
     public class ReceptionistController : ControllerBase
     {
-        private readonly IReceptionistService receptionistService;
+        private readonly IReceptionistService _service;
 
-        public ReceptionistController(IReceptionistService receptionistService) => this.receptionistService = receptionistService;
+        public ReceptionistController(IReceptionistService receptionistService)
+        {
+            _service = receptionistService;
+        }
 
         /// <summary>
         /// View receptionist
@@ -20,7 +23,7 @@ namespace Presentation
         [HttpGet]
         public async Task<IActionResult> GetReceptionistsAsync(CancellationToken token)
         {
-            var receptionistDTO = await receptionistService.GetAllAsync(token);
+            var receptionistDTO = await _service.GetAllAsync(token);
 
             return Ok(receptionistDTO);
         }
@@ -34,7 +37,7 @@ namespace Presentation
         [HttpGet("{receptionistId:guid}")]
         public async Task<IActionResult> GetReceptionistAsync(Guid receptionistId, CancellationToken token)
         {
-            var receptionistDTO = await receptionistService.GetByIdAsync(receptionistId, token);
+            var receptionistDTO = await _service.GetByIdAsync(receptionistId, token);
 
             return Ok(receptionistDTO);
         }
@@ -49,9 +52,9 @@ namespace Presentation
         [HttpPut("{receptionistId:guid}")]
         public async Task<IActionResult> UpdateDoctorAsync(Guid receptionistId, ReceptionistDTO receptionistDTO, CancellationToken token)
         {
-            var _receptionistDTO = await receptionistService.UpdateAsync(receptionistId, receptionistDTO, token);
+            var receptionist = await _service.UpdateAsync(receptionistId, receptionistDTO, token);
 
-            return Ok(_receptionistDTO);
+            return Ok(receptionist);
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace Presentation
         [HttpPost]
         public async Task<IActionResult> CreateReceptionistAsync(ReceptionistDTO _receptionistDTO, CancellationToken token)
         {
-            var receptionistDTO = await receptionistService.CreateAsync(_receptionistDTO,token);
+            var receptionistDTO = await _service.CreateAsync(_receptionistDTO,token);
 
             return Created($"{receptionistDTO.Id}", receptionistDTO);
         }
@@ -76,7 +79,7 @@ namespace Presentation
         [HttpDelete("{receptionistId:guid}")]
         public async Task<IActionResult> DeleteReceptionistAsync(Guid receptionistId, CancellationToken token)
         {
-            await receptionistService.DeleteAsync(receptionistId, token);
+            await _service.DeleteAsync(receptionistId, token);
 
             return NoContent();
         }

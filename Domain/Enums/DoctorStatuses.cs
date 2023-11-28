@@ -1,12 +1,12 @@
-﻿namespace Domain
+﻿namespace Domain.Enums
 {
     public enum DoctorStatuses
     {
-        AtWork, 
+        AtWork,
         OnVacation,
         SickDay,
         SickLeave,
-        SelfIsolation, 
+        SelfIsolation,
         LeaveWithoutPay,
         Inactive
     }

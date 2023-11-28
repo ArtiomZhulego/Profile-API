@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Domain;
+using Domain.Enums;
 using Domain.Repositories;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -8,60 +9,48 @@ namespace Persistance
 {
     public class DoctorRepository : IDoctorRepository
     {
-        private NpgsqlConnection connection;
+        private readonly NpgsqlConnection _connection;
 
         public DoctorRepository(IConfiguration configuration)
         {
-            connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
+            _connection = new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public async Task<Doctor> CreateAsync(Doctor _doctor, CancellationToken token)
+        public async Task<Doctor> CreateAsync(Doctor doctor, CancellationToken token)
         {
-            await connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\",\"AccountId\")" +
+            await _connection.QueryAsync<Doctor>($"INSERT INTO public.\"Doctor\" (\"Id\",\"Photo\", \"FirstName\", \"MiddleName\", \"LastName\", \"DateOfBirth\", \"Email\", \"SpecializationId\", \"OfficeId\", \"CareerStartYear\", \"DoctorStatuses\",\"AccountId\")" +
                                                              $"VALUES (@Id,@Photo,@FirstName,@MiddleName,@LastName,@DateOfBirth,@Email,@SpecializationId,@OfficeId,@CareerStartYear,@DoctorStatuses,@AccountId)",_doctor);
 
-            return _doctor;
+            return doctor;
         }
 
-        public async Task DeleteAsync(Guid doctorId, CancellationToken token)
-        {
-            await connection.QueryAsync($"DELETE FROM public.\"Doctor\" Where \"Id\" = {doctorId}");
-        }
+        public async Task DeleteAsync(Guid doctorId, CancellationToken token) =>       
+            await _connection.QueryAsync($"DELETE FROM public.\"Doctor\" Where \"Id\" = {doctorId}");
 
-        public async Task<List<Doctor>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token)
-        {
-            var doctor = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
-                                                                            $"WHERE \"SpecializationId\" = @SpecializationId",new { SpecializationId = specialityId});
+        public async Task<IEnumerable<Doctor>> FilterDoctorAsync(Guid officeId, Guid specialityId, CancellationToken token) =>
+            await _connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\"" +
+                                                                            $"WHERE \"SpecializationId\" = @SpecializationId", new { SpecializationId = specialityId });
+        public async Task<IEnumerable<Doctor>> GetAllAsync(CancellationToken cancellationToken = default) =>
+            await _connection.QueryAsync<Doctor>("SELECT * FROM public.\"Doctor\"");
 
-            return doctor.ToList();
-        }
-
-        public async Task<List<Doctor>> GetAllAsync(CancellationToken cancellationToken = default)
-        {
-            var doctors = await connection.QueryAsync<Doctor>("SELECT * FROM public.\"Doctor\"");
-
-            return doctors.ToList();
-        }
 
         public async Task<Doctor> GetByIdAsync(Guid doctorId, CancellationToken cancellationToken = default)
         {
-            var doctor = await connection.QueryAsync<Doctor>($"SELECT * " +
+            var doctor = await _connection.QueryAsync<Doctor>($"SELECT * " +
                                                              $"FROM public.\"Doctor\" WHERE \"Id\" = @Id",new { Id = doctorId });
 
             return doctor.FirstOrDefault();
         }
 
-        public async Task<List<Doctor>> SearchByNameAsync(string fullName, CancellationToken token)
-        {
-            var doctorsList = await connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\" WHERE" +
+        public async Task<IEnumerable<Doctor>> SearchByNameAsync(string fullName, CancellationToken token) =>
+            await _connection.QueryAsync<Doctor>($"SELECT * From public.\"Doctor\" WHERE" +
                                                                   $"\"FirstName\" LIKE @FirstName OR \"MiddleName\" LIKE @MiddleName OR \"LastName\" LIKE @LastName", new { FirstName = fullName, MiddleName = fullName, LastName = fullName });
 
-            return doctorsList.ToList();
-        }
+        
 
-        public async Task<Doctor> UpdateAsync(Guid doctorId, Doctor _doctor, CancellationToken token)
+        public async Task<Doctor> UpdateAsync(Guid doctorId, Doctor doctor, CancellationToken token)
         {
-            await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET" +
+            await _connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET" +
                                                                     $"\"Photo\" = @Photo, " +
                                                                     $"\"FirstName\" = @FirstName, " +
                                                                     $"\"MiddleName\" = @MiddleName, " +
@@ -72,16 +61,16 @@ namespace Persistance
                                                                     $"\"OfficeId\" = @OfficeId, " +
                                                                     $"\"CareerStartYear\" = @CareerStartYear, " +
                                                                     $"\"DoctorStatuses\" = @DoctorStatuses " +
-                                                                    $"WHERE \"Id\" = @Id",_doctor);
+                                                                    $"WHERE \"Id\" = @Id",doctor);
 
-            return _doctor;
+            return doctor;
         }
 
-        public async Task<Doctor> UpdateStatusAsync(Guid doctorId, int statuseId, CancellationToken token)
+        public async Task<Doctor> UpdateStatusAsync(Guid doctorId, DoctorStatuses statuse, CancellationToken token)
         {
-            var doctor = await connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET " +
+            var doctor = await _connection.QueryAsync<Doctor>($"UPDATE public.\"Doctor\" SET " +
                                                                      $"\"DoctorStatuses\" = @DoctorStatuses WHERE \"Id\" = @DoctorId",
-                                                                     new { DoctorStatuses = statuseId, DoctorId = doctorId });
+                                                                     new { DoctorStatuses = statuse, DoctorId = doctorId });
 
             return doctor.FirstOrDefault();
         }
